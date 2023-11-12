@@ -1,5 +1,6 @@
 package com.cocktapp
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.cocktapp.navigation.CocktailNavigation
 import com.cocktapp.ui.theme.CocktAPPTheme
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
@@ -23,6 +26,16 @@ import dagger.hilt.android.HiltAndroidApp
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        FirebaseApp.initializeApp(this)
+        val db = FirebaseFirestore.getInstance()
+        val user:MutableMap<String,Any> = HashMap()
+        user["user"] = "user"
+        user["password"] = "password"
+
+        db.collection("Users").add(user).addOnSuccessListener { Log.d("Firebase","${it}") }.addOnFailureListener { Log.d("Firebase","${it}") }
+
+
         setContent {
             CocktAPPTheme {
                 // A surface container using the 'background' color from the theme
