@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.cocktapp.navigation.AvaliableScreens
 import com.cocktapp.ui.theme.CocktailFonts
 
 @Composable
@@ -44,7 +46,7 @@ fun MainScreen(navController: NavController)
         ) {
 
             Text(
-                text = AnnotatedString("Fuck you, Cesar!", ParagraphStyle(textAlign = TextAlign.Center)),
+                text = AnnotatedString("Still fuck you, Cesar!", ParagraphStyle(textAlign = TextAlign.Center)),
                 fontFamily = CocktailFonts.dancingScriptFamily,
                 fontStyle = FontStyle.Normal,
                 fontWeight = FontWeight.Medium,
@@ -52,6 +54,10 @@ fun MainScreen(navController: NavController)
 
             )
 
+         Button(onClick = { navController.navigate(AvaliableScreens.MyCocktailsScreen.name)}) {
+             Text(text = "My cocktails")
+
+         }
         }
 
     }

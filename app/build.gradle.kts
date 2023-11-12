@@ -83,6 +83,10 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     //GSON converter
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // SAVED STATE REGISTRY OWNER KEY BUG
+    implementation ("androidx.navigation:navigation-compose:2.5.3")
+    implementation ("androidx.fragment:fragment-ktx:1.5.2")
 }
 
 
