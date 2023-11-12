@@ -55,9 +55,13 @@ fun ShowData(myCocktailsViewModel: MyCocktailsViewModel){
         Log.d("DONE","LOADING DATA DONE")
         cocktailData.data?.forEach { cocktail ->
             Text(text = cocktail.name)
-//            Text(text = cocktail.ingredients.toString())
-//            Text(text = cocktail.instructions)
+            Text(text = cocktail.ingredients.toString())
+           Text(text = cocktail.instructions)
         }
         }
+    else{
+        Text(text = "No cocktails found, data is null")
     }
+    }
+
 
