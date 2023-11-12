@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -24,17 +25,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.cocktapp.R
 import com.cocktapp.ui.theme.CocktailFonts
 
 @Composable
 fun MainScreen(navController: NavController)
 {
-
     Surface(
         modifier = Modifier
             .padding(15.dp)
-            .size(340.dp)        ,
+            .fillMaxSize()      ,
         color = Color.White,
 
     ) {
