@@ -13,10 +13,14 @@ interface CocktailAPI{
 
     @GET(value ="v1/cocktail")
     @Headers(Const.API_HEADER+":"+Const.API_KEY)
-    suspend fun getCocktails(
-        @Query("ingredients") ingredients: String? = null,
-        @Query("name") name:String = "a",
-
+    suspend fun getCocktailsByName(
+        @Query("name") name:String,
         ):Cocktails
 
+    @GET(value ="v1/cocktail")
+    @Headers(Const.API_HEADER+":"+Const.API_KEY)
+    suspend fun getCocktailsByIngredients(
+        @Query("ingredients") ingredients:String = "",
+
+        ):Cocktails
 }

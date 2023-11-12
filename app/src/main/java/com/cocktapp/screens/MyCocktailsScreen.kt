@@ -43,7 +43,8 @@ fun MyCocktailsScreen(navController: NavController, myCocktailsViewModel: MyCock
 @Composable
 fun ShowData(myCocktailsViewModel: MyCocktailsViewModel){
     val cocktailData = produceState<DataRequestWrapper<Cocktails,String,Exception>>(initialValue = DataRequestWrapper(state="loading")){
-        value = myCocktailsViewModel.getCocktails("")
+//        value = myCocktailsViewModel.getCocktailsByIngredients("vodka,rum")
+            value = myCocktailsViewModel.getCocktailsByName()
     }.value
 
     if(cocktailData.state=="loading"){
@@ -54,6 +55,8 @@ fun ShowData(myCocktailsViewModel: MyCocktailsViewModel){
         Log.d("DONE","LOADING DATA DONE")
         cocktailData.data?.forEach { cocktail ->
             Text(text = cocktail.name)
+//            Text(text = cocktail.ingredients.toString())
+//            Text(text = cocktail.instructions)
         }
         }
     }

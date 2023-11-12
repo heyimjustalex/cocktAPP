@@ -13,7 +13,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
 class MyCocktailsViewModel @Inject constructor(private val cocktailRepository: CocktailRepository) :ViewModel() {
-    suspend fun getCocktails(query:String): DataRequestWrapper<Cocktails, String, Exception> {
-        return cocktailRepository.getCocktails(query)
+    suspend fun getCocktailsByName(name:String = "a"): DataRequestWrapper<Cocktails, String, Exception> {
+        return cocktailRepository.getCocktailsByName(name)
+    }
+    suspend fun getCocktailsByIngredients(ingredients:String = "a"): DataRequestWrapper<Cocktails, String, Exception> {
+        return cocktailRepository.getCocktailsByIngredients(ingredients)
     }
 }
