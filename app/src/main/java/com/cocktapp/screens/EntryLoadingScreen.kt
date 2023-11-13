@@ -47,7 +47,7 @@ fun EntryLoadingScreen(navController: NavController) {
             animation = tween(300),
             repeatMode = RepeatMode.Reverse
         ) )
-        navController.navigate(AvaliableScreens.MainScreen.name)
+        navController.navigate(AvaliableScreens.LoginScreen.name)
     })
 
     Surface (modifier=Modifier.fillMaxSize(), color = Color.White) {

@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cocktapp.screens.EntryLoadingScreen
+import com.cocktapp.screens.LoginScreen
 import com.cocktapp.screens.MainScreen
 import com.cocktapp.screens.MyCocktailsScreen
 
@@ -25,6 +26,9 @@ fun CocktailNavigation() {
         }
         composable( AvaliableScreens.MyCocktailsScreen.name){
             MyCocktailsScreen(navController)
+        }
+        composable( AvaliableScreens.LoginScreen.name){
+            LoginScreen(navController)
         }
     }
 }
