@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.cocktapp.components.BottomFormRedirectButton
 import com.cocktapp.components.EmailInputField
 import com.cocktapp.components.PasswordInputField
 import com.cocktapp.components.SubmitButtonField
@@ -63,16 +64,7 @@ fun LoginScreen(navController: NavController){
             Text("This is login screen")
             LoginForm()
 
-            Text(
-                text = "Click here to sign up!",
-                modifier = Modifier
-                    .padding(4.dp)
-                    .clickable {
-                        navController.navigate(AvaliableScreens.RegisterScreen.name)
-                    }
-                    .border(1.dp, color = Color.Blue, shape = CircleShape)
-                    .padding(8.dp)
-            )
+            BottomFormRedirectButton(navController,AvaliableScreens.RegisterScreen.name,"Click here to sign up!")
         }
     }
 }
@@ -101,7 +93,7 @@ fun LoginForm(
     val passwordFocus = FocusRequester.Default
     val keyboardController = LocalSoftwareKeyboardController.current
     val isValid = remember(email.value, password.value) {
-        email.value.trim().isNotEmpty() && password.value.trim().isNotEmpty()
+        email.value.trim().isNotEmpty() && password.value.trim().isNotEmpty() && password.value.trim().length>=6
     }
 
     val modifier = Modifier

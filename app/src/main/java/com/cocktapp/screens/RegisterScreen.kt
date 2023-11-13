@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.cocktapp.components.BottomFormRedirectButton
 import com.cocktapp.components.EmailInputField
 import com.cocktapp.components.PasswordInputField
 import com.cocktapp.components.SubmitButtonField
@@ -34,11 +36,17 @@ import com.cocktapp.navigation.AvaliableScreens
 fun RegisterScreen(navController: NavController){
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center){
             Text("This is register screen")
             RegisterForm()
-            Text(text = "Click to login!", modifier=Modifier.fillMaxWidth().clickable { navController.navigate(
-                AvaliableScreens.LoginScreen.name)  })
+
+            BottomFormRedirectButton(navController,  AvaliableScreens.LoginScreen.name,"Click here to login!")
+
         }
 
     }
@@ -68,7 +76,7 @@ fun RegisterForm(
     val passwordFocus = FocusRequester.Default
     val keyboardController = LocalSoftwareKeyboardController.current
     val isValid = remember(email.value, password.value) {
-        email.value.trim().isNotEmpty() && password.value.trim().isNotEmpty()
+        email.value.trim().isNotEmpty() && password.value.trim().isNotEmpty() && password.value.trim().length>=6
     }
 
     val modifier = Modifier

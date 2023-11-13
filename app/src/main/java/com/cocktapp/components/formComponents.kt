@@ -1,5 +1,7 @@
 package com.cocktapp.components
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,6 +28,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.cocktapp.navigation.AvaliableScreens
 
 
 @Composable
@@ -149,8 +153,20 @@ fun SubmitButtonField(text: String,
 
     }
 
+}
 
-
+@Composable
+fun BottomFormRedirectButton(navController: NavController, navRoute:String, text:String){
+    Text(
+        text =text,
+        modifier = Modifier
+            .padding(4.dp)
+            .clickable {
+                navController.navigate(navRoute)
+            }
+            .border(1.dp, color = Color.Blue, shape = CircleShape)
+            .padding(8.dp)
+    )
 
 }
 
