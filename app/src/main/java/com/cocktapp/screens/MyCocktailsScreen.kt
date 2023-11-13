@@ -43,8 +43,8 @@ fun MyCocktailsScreen(navController: NavController, myCocktailsViewModel: MyCock
 @Composable
 fun ShowData(myCocktailsViewModel: MyCocktailsViewModel){
     val cocktailData = produceState<DataRequestWrapper<Cocktails,String,Exception>>(initialValue = DataRequestWrapper(state="loading")){
-//        value = myCocktailsViewModel.getCocktailsByIngredients("vodka,rum")
-            value = myCocktailsViewModel.getCocktailsByName()
+        value = myCocktailsViewModel.getCocktailsByIngredients("vodka,rum")
+       //     value = myCocktailsViewModel.getCocktailsByName()
     }.value
 
     if(cocktailData.state=="loading"){

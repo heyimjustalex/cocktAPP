@@ -9,6 +9,7 @@ import com.cocktapp.screens.EntryLoadingScreen
 import com.cocktapp.screens.LoginScreen
 import com.cocktapp.screens.MainScreen
 import com.cocktapp.screens.MyCocktailsScreen
+import com.cocktapp.screens.RegisterScreen
 
 @Composable
 fun CocktailNavigation() {
@@ -29,6 +30,9 @@ fun CocktailNavigation() {
         }
         composable( AvaliableScreens.LoginScreen.name){
             LoginScreen(navController)
+        }
+        composable( AvaliableScreens.RegisterScreen.name){
+            RegisterScreen(navController)
         }
     }
 }

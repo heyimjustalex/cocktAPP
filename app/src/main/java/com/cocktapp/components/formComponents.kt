@@ -2,10 +2,14 @@ package com.cocktapp.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -120,3 +124,33 @@ fun isPasswordVisibleIcon(isPasswordVisible: MutableState<Boolean>) {
         Icon(imageVector = Icons.Rounded.Edit, contentDescription = "Password Visibility" )
     }
 }
+
+@Composable
+fun SubmitButtonField(text: String,
+                      loading: Boolean,
+                      inputsAreValid: Boolean,
+                      onClick: ()->Unit
+) {
+    Button(
+        modifier= Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        onClick = onClick,
+        enabled = !loading && inputsAreValid,
+        shape = CircleShape
+    ){
+
+        if(loading){
+            CircularProgressIndicator(modifier=Modifier.size(20.dp))
+        }
+        else{
+            Text(text = text, modifier=Modifier.padding(3.dp))
+        }
+
+    }
+
+
+
+
+}
+
