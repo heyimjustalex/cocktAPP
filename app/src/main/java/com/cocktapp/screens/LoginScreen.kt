@@ -7,10 +7,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -59,23 +63,23 @@ fun LoginForm(
     onDone:(String,String) -> Unit = { s: String, s1: String -> }
 
 
-){
+) {
     val email = rememberSaveable {
         mutableStateOf("")
     }
 
-    val password= rememberSaveable {
+    val password = rememberSaveable {
         mutableStateOf("")
 
     }
 
-    val isPasswordVisible= rememberSaveable {
+    val isPasswordVisible = rememberSaveable {
         mutableStateOf(false)
     }
 
     val passwordFocus = FocusRequester.Default
     val keyboardController = LocalSoftwareKeyboardController.current
-    val isValid = remember(email.value, password.value){
+    val isValid = remember(email.value, password.value) {
         email.value.trim().isNotEmpty() && password.value.trim().isNotEmpty()
     }
 
@@ -85,7 +89,7 @@ fun LoginForm(
         .verticalScroll(rememberScrollState())
 
     Column(
-        modifier=modifier,
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -93,27 +97,73 @@ fun LoginForm(
             modifier = Modifier,
             emailState = email,
             enabled = !loading,
-            onAction = KeyboardActions{
+            onAction = KeyboardActions {
                 passwordFocus.requestFocus()
             }
         )
         PasswordInputField(
-            modifier=Modifier.focusRequester(passwordFocus),
+            modifier = Modifier.focusRequester(passwordFocus),
             valueState = password,
             label = "password",
             enabled = !loading,
             isPasswordVisible = isPasswordVisible,
 
-            onAction = KeyboardActions{
-                if(!isValid) return@KeyboardActions
-                else
-                {
-                    onDone(email.value.trim(),password.value.trim())
+            onAction = KeyboardActions {
+                if (!isValid) return@KeyboardActions
+                else {
+                    onDone(email.value.trim(), password.value.trim())
                 }
             }
+        )
+
+        SubmitButtonField(
+            text = if (isCreateAccount) "Create Account" else "Login",
+            loading = loading,
+            inputsAreValid = isValid,
+            onClick = {
+
+                onDone(email.value.trim(), password.value.trim())
+                if (keyboardController != null) {
+                    keyboardController.hide()
+                }
+            }
+
         )
 
     }
 
 }
+
+@Composable
+fun SubmitButtonField(text: String,
+                      loading: Boolean,
+                      inputsAreValid: Boolean,
+                      onClick: ()->Unit
+) {
+    Button(
+        modifier= Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        onClick = onClick,
+        enabled = !loading && inputsAreValid,
+        shape = CircleShape
+    ){
+
+        if(loading){
+            CircularProgressIndicator(modifier=Modifier.size(20.dp))
+        }
+        else{
+            Text(text = text, modifier=Modifier.padding(3.dp))
+        }
+
+        }
+
+
+
+
+    }
+
+
+
+
 
