@@ -81,7 +81,7 @@ fun LoginForm(
 
     val modifier = Modifier
         .height(260.dp)
-        .background(Color.Black)
+        .background(Color.White)
         .verticalScroll(rememberScrollState())
 
     Column(

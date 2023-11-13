@@ -9,12 +9,12 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -61,12 +61,13 @@ fun InputField(
         label = { Text(text = label) },
         singleLine = isSingleLine,
         enabled = enabled,
-        textStyle = TextStyle(fontSize=15.sp,color= MaterialTheme.colorScheme.onSecondary) ,
+        textStyle = TextStyle(fontSize=15.sp,color= Color.Black) ,
         onValueChange = {valueState.value = it},
         modifier = modifier
             .padding(12.dp)
             .fillMaxWidth(),
-        keyboardOptions = KeyboardOptions(keyboardType=keyboardType,imeAction=imeAction)
+        keyboardOptions = KeyboardOptions(keyboardType=keyboardType,imeAction=imeAction),
+        keyboardActions = onAction
 
 
     )
@@ -98,7 +99,7 @@ fun PasswordInputField(modifier: Modifier,
         singleLine = isSingleLine,
         enabled = enabled,
         label = { Text(text = label)},
-        textStyle = TextStyle(fontSize=15.sp,color= MaterialTheme.colorScheme.onSecondary) ,
+        textStyle = TextStyle(fontSize=15.sp,color= Color.Black) ,
         modifier = modifier
             .padding(12.dp)
             .fillMaxWidth(),
@@ -107,8 +108,10 @@ fun PasswordInputField(modifier: Modifier,
         keyboardOptions = KeyboardOptions(
             keyboardType= KeyboardType.Password,
             imeAction=imeAction),
+        keyboardActions = onAction
 
         )
+
 }
 
 @Composable
