@@ -56,7 +56,6 @@ fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenV
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginForm(
-    loading:Boolean = false,
     onDone:(String,String) -> Unit = { s: String, s1: String -> },
     loginScreenViewModel: LoginScreenViewModel,
     navController:NavController
@@ -75,12 +74,12 @@ fun LoginForm(
         mutableStateOf(false)
     }
 
-    val passwordFocus = FocusRequester.Default
+    val passwordFocus = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val isValid = remember(email.value, password.value) {
         email.value.trim().isNotEmpty() && password.value.trim().isNotEmpty() && password.value.trim().length>=6
     }
-
+    val stateValue = loginScreenViewModel.state.value
     val modifier = Modifier
 
         .background(Color.White)
@@ -96,7 +95,7 @@ fun LoginForm(
         EmailInputField(
             modifier = Modifier,
             emailState = email,
-            enabled = !loading,
+            enabled = stateValue!==FetchingState.LOADING,
             onAction = KeyboardActions {
                 passwordFocus.requestFocus()
             }
@@ -105,13 +104,17 @@ fun LoginForm(
             modifier = Modifier.focusRequester(passwordFocus),
             valueState = password,
             label = "password",
-            enabled = !loading,
+            enabled = stateValue!==FetchingState.LOADING,
             isPasswordVisible = isPasswordVisible,
 
             onAction = KeyboardActions {
                 if (!isValid) return@KeyboardActions
                 else {
                     onDone(email.value.trim(), password.value.trim())
+                    if (keyboardController != null) {
+                        keyboardController.hide()
+
+                    }
                 }
             }
         )
@@ -120,7 +123,7 @@ fun LoginForm(
 
         SubmitButtonField(
             text = "Login",
-            loading = loading,
+            loading = stateValue==FetchingState.LOADING,
             inputsAreValid = isValid,
             onClick = {
                 onDone(email.value.trim(), password.value.trim())
@@ -151,7 +154,7 @@ fun LoginForm(
 fun RenderProperStateChangeReaction(state: MutableState<FetchingState>){
     if(state.value==FetchingState.LOADING){
         Text(text = state.value.message)
-        CircularProgressIndicator()
+    //    CircularProgressIndicator()
     }
     else {
         Text(text = state.value.message)

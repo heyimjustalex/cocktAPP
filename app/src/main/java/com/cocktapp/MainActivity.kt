@@ -27,15 +27,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        FirebaseApp.initializeApp(this)
-        val db = FirebaseFirestore.getInstance()
-        val user:MutableMap<String,Any> = HashMap()
-        user["user"] = "user"
-        user["password"] = "password"
-
-        db.collection("Users").add(user).addOnSuccessListener { Log.d("Firebase","${it}") }.addOnFailureListener { Log.d("Firebase","${it}") }
-
-
         setContent {
             CocktAPPTheme {
                 // A surface container using the 'background' color from the theme

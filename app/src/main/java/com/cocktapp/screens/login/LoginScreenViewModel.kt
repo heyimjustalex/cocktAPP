@@ -1,5 +1,4 @@
 package com.cocktapp.screens.login
-
 import FetchingState
 import android.util.Log
 import androidx.compose.runtime.MutableState
@@ -8,16 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthActionCodeException
-import com.google.firebase.auth.FirebaseAuthEmailException
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import com.google.firebase.auth.FirebaseAuthMultiFactorException
-import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseAuthWebException
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -34,7 +25,11 @@ class LoginScreenViewModel :ViewModel() {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     state.value = FetchingState.SUCCESS.withMessage("Success!")
+
+
+
                     Log.d("LOGIN", "Success logging in TASK: ${task.result}")
+
                     onSuccess()
 
 
@@ -50,7 +45,11 @@ class LoginScreenViewModel :ViewModel() {
             Log.d("LOGIN", "loginUser exception")
         }
     }
+
+
 }
+
+
 
 fun getMessageForFirebaseExceptionLogin(exception: Exception?): String {
     var exceptionMessage = ""

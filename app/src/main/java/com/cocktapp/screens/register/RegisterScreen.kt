@@ -1,6 +1,8 @@
 package com.cocktapp.screens.register
 
 import FetchingState
+import android.util.Log
+import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -58,7 +60,7 @@ fun RegisterScreen(navController: NavController, registerScreenViewModel: Regist
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun RegisterForm(
-    loading:Boolean = false,
+
     onDone:(String,String) -> Unit = { s: String, s1: String -> } ,
     registerScreenViewModel: RegisterScreenViewModel,
     navController:NavController
@@ -78,7 +80,7 @@ fun RegisterForm(
         mutableStateOf(false)
     }
 
-    val passwordFocus = FocusRequester.Default
+    val passwordFocus = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     val isValid = remember(email.value, password.value) {
         email.value.trim().isNotEmpty() && password.value.trim().isNotEmpty() && password.value.trim().length>=6
@@ -90,6 +92,7 @@ fun RegisterForm(
         .verticalScroll(rememberScrollState())
 
 
+    val stateValue = registerScreenViewModel.state.value
 
     Column(
         modifier = modifier,
@@ -100,22 +103,28 @@ fun RegisterForm(
         EmailInputField(
             modifier = Modifier,
             emailState = email,
-            enabled = !loading,
+            label = "email",
+            enabled = stateValue!==FetchingState.LOADING,
             onAction = KeyboardActions {
                 passwordFocus.requestFocus()
+
             }
         )
         PasswordInputField(
             modifier = Modifier.focusRequester(passwordFocus),
             valueState = password,
             label = "password",
-            enabled = !loading,
+            enabled = stateValue!==FetchingState.LOADING,
             isPasswordVisible = isPasswordVisible,
 
             onAction = KeyboardActions {
                 if (!isValid) return@KeyboardActions
                 else {
                     onDone(email.value.trim(), password.value.trim())
+                    if (keyboardController != null) {
+                        keyboardController.hide()
+
+                    }
                 }
             }
         )
@@ -124,8 +133,9 @@ fun RegisterForm(
 
         SubmitButtonField(
             text = "Register",
-            loading = loading,
+            loading = stateValue==FetchingState.LOADING,
             inputsAreValid = isValid,
+
             onClick = {
 
                 onDone(email.value.trim(), password.value.trim())
@@ -149,7 +159,7 @@ fun RegisterForm(
 fun RenderProperStateChangeReaction(state: MutableState<FetchingState>){
     if(state.value==FetchingState.LOADING){
         Text(text = state.value.message)
-        CircularProgressIndicator()
+//        CircularProgressIndicator()
     }
     else {
         Text(text = state.value.message)

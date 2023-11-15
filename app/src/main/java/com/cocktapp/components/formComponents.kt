@@ -133,7 +133,8 @@ fun isPasswordVisibleIcon(isPasswordVisible: MutableState<Boolean>) {
 fun SubmitButtonField(text: String,
                       loading: Boolean,
                       inputsAreValid: Boolean,
-                      onClick: ()->Unit
+                      onClick: ()->Unit,
+
 ) {
     Button(
         modifier= Modifier
@@ -141,7 +142,9 @@ fun SubmitButtonField(text: String,
             .padding(10.dp),
         onClick = onClick,
         enabled = !loading && inputsAreValid,
-        shape = CircleShape
+        shape = CircleShape,
+
+
     ){
 
         if(loading){
