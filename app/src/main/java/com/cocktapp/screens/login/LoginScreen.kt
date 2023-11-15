@@ -1,30 +1,18 @@
-package com.cocktapp.screens
+package com.cocktapp.screens.login
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,24 +22,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.cocktapp.components.BottomFormRedirectButton
 import com.cocktapp.components.EmailInputField
 import com.cocktapp.components.PasswordInputField
 import com.cocktapp.components.SubmitButtonField
 import com.cocktapp.navigation.AvaliableScreens
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun LoginScreen(navController: NavController){
+fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenViewModel = viewModel()){
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -62,7 +44,7 @@ fun LoginScreen(navController: NavController){
             verticalArrangement = Arrangement.Center
         ) {
             Text("This is login screen")
-            LoginForm()
+            LoginForm(loginScreenViewModel = loginScreenViewModel, navController = navController)
 
             BottomFormRedirectButton(navController,AvaliableScreens.RegisterScreen.name,"Click here to sign up!")
         }
@@ -72,9 +54,9 @@ fun LoginScreen(navController: NavController){
 @Composable
 fun LoginForm(
     loading:Boolean = false,
-    isCreateAccount:Boolean = false,
-    onDone:(String,String) -> Unit = { s: String, s1: String -> }
-
+    onDone:(String,String) -> Unit = { s: String, s1: String -> },
+    loginScreenViewModel: LoginScreenViewModel,
+    navController:NavController
 
 ) {
     val email = rememberSaveable {
@@ -129,16 +111,26 @@ fun LoginForm(
             }
         )
 
+        if(loginScreenViewModel.loading.value==true){
+            CircularProgressIndicator()
+        }
+
         SubmitButtonField(
-            text = if (isCreateAccount) "Create Account" else "Login",
+            text = "Login",
             loading = loading,
             inputsAreValid = isValid,
             onClick = {
-
                 onDone(email.value.trim(), password.value.trim())
                 if (keyboardController != null) {
                     keyboardController.hide()
                 }
+                loginScreenViewModel.logUserIn(email.value.trim(), password.value.trim(),
+                    onSuccess = {navController.navigate(AvaliableScreens.MainScreen.name)}
+
+                    )
+
+
+
             }
 
         )

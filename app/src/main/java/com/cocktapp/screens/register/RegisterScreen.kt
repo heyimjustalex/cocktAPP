@@ -1,16 +1,15 @@
-package com.cocktapp.screens
+package com.cocktapp.screens.register
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,15 +24,17 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cocktapp.components.BottomFormRedirectButton
 import com.cocktapp.components.EmailInputField
 import com.cocktapp.components.PasswordInputField
 import com.cocktapp.components.SubmitButtonField
 import com.cocktapp.navigation.AvaliableScreens
+import com.cocktapp.screens.login.LoginScreenViewModel
 
 @Composable
-fun RegisterScreen(navController: NavController){
+fun RegisterScreen(navController: NavController, registerScreenViewModel: RegisterScreenViewModel = viewModel()){
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -43,7 +44,7 @@ fun RegisterScreen(navController: NavController){
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center){
             Text("This is register screen")
-            RegisterForm()
+            RegisterForm(registerScreenViewModel=registerScreenViewModel, navController = navController)
 
             BottomFormRedirectButton(navController,  AvaliableScreens.LoginScreen.name,"Click here to login!")
 
@@ -56,7 +57,9 @@ fun RegisterScreen(navController: NavController){
 fun RegisterForm(
     loading:Boolean = false,
     isCreateAccount:Boolean = false,
-    onDone:(String,String) -> Unit = { s: String, s1: String -> }
+    onDone:(String,String) -> Unit = { s: String, s1: String -> } ,
+    registerScreenViewModel: RegisterScreenViewModel,
+    navController:NavController
 
 
 ) {
@@ -112,6 +115,10 @@ fun RegisterForm(
             }
         )
 
+        if(registerScreenViewModel.loading.value==true){
+            CircularProgressIndicator()
+        }
+
         SubmitButtonField(
             text = if (isCreateAccount) "Create Account" else "Register",
             loading = loading,
@@ -122,6 +129,12 @@ fun RegisterForm(
                 if (keyboardController != null) {
                     keyboardController.hide()
                 }
+                registerScreenViewModel.registerUserWithEmailAndPassword(email.value,password.value,
+                    onSuccess = {
+                        navController.navigate(AvaliableScreens.MainScreen.name)
+                    }
+                    )
+
             }
 
         )
