@@ -3,6 +3,7 @@ package com.cocktapp.screens.login
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -43,7 +44,7 @@ fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenV
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("This is login screen")
+            Text("This is the login screen")
             LoginForm(loginScreenViewModel = loginScreenViewModel, navController = navController)
 
             BottomFormRedirectButton(navController,AvaliableScreens.RegisterScreen.name,"Click here to sign up!")
@@ -79,13 +80,15 @@ fun LoginForm(
     }
 
     val modifier = Modifier
-        .height(260.dp)
+
         .background(Color.White)
+        .height(370.dp)
         .verticalScroll(rememberScrollState())
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
         EmailInputField(

@@ -1,8 +1,10 @@
 package com.cocktapp.screens.register
 
+import FetchingState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,6 +15,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -43,7 +46,7 @@ fun RegisterScreen(navController: NavController, registerScreenViewModel: Regist
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center){
-            Text("This is register screen")
+            Text("This is the register screen")
             RegisterForm(registerScreenViewModel=registerScreenViewModel, navController = navController)
 
             BottomFormRedirectButton(navController,  AvaliableScreens.LoginScreen.name,"Click here to login!")
@@ -83,13 +86,16 @@ fun RegisterForm(
     }
 
     val modifier = Modifier
-        .height(260.dp)
+        .height(370.dp)
         .background(Color.White)
         .verticalScroll(rememberScrollState())
 
+
+
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
 
         EmailInputField(
@@ -115,9 +121,7 @@ fun RegisterForm(
             }
         )
 
-        if(registerScreenViewModel.loading.value==true){
-            CircularProgressIndicator()
-        }
+        RenderProperStateChangeReaction(registerScreenViewModel.state)
 
         SubmitButtonField(
             text = if (isCreateAccount) "Create Account" else "Register",
@@ -141,6 +145,16 @@ fun RegisterForm(
 
     }
 
+}
+@Composable
+fun RenderProperStateChangeReaction(state: MutableState<FetchingState>){
+    if(state.value==FetchingState.LOADING){
+        Text(text = state.value.message)
+        CircularProgressIndicator()
+    }
+    else {
+        Text(text = state.value.message)
+    }
 }
 
 
