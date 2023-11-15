@@ -1,5 +1,6 @@
 package com.cocktapp.screens.login
 
+import FetchingState
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -7,6 +8,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthActionCodeException
+import com.google.firebase.auth.FirebaseAuthEmailException
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthMultiFactorException
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWebException
 import com.google.firebase.auth.auth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -15,28 +25,69 @@ class LoginScreenViewModel :ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
 
-    val loading: MutableState<Boolean> = mutableStateOf(false)
+    val state: MutableState<FetchingState> = mutableStateOf(FetchingState.IDLE)
 
     fun logUserIn(email: String, password: String, onSuccess: () -> Unit) = viewModelScope.launch {
-        loading.value = true
+        state.value = FetchingState.LOADING.withMessage("Wait...")
         delay(500)
         try {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    state.value = FetchingState.SUCCESS.withMessage("Success!")
                     Log.d("LOGIN", "Success logging in TASK: ${task.result}")
                     onSuccess()
 
-                    loading.value = false
+
                 } else {
                     Log.d("LOGIN", "Can't log in TASK: ${task.exception?.stackTrace.toString()}")
-
-                    loading.value = false
+                    val message = getMessageForFirebaseExceptionLogin(task.exception)
+                    state.value = FetchingState.FAILED_INSTANCE.withMessage(message)
                 }
             }
-        } catch (exception: Exception) {
-
-            loading.value = false
+        } catch (e: Exception) {
+            val message = getMessageForFirebaseExceptionLogin(e)
+            state.value = FetchingState.FAILED.withMessage(message)
             Log.d("LOGIN", "loginUser exception")
+        }
+    }
+}
+
+fun getMessageForFirebaseExceptionLogin(exception: Exception?): String {
+    var exceptionMessage = ""
+    if (exception != null) {
+        exceptionMessage = exception.localizedMessage.orEmpty()
+        Log.d("EXC", exception.message.toString())
+    }
+    return when {
+        exceptionMessage.contains("credentials", true) -> {
+            "Invalid credentials"
+        }
+        exceptionMessage.contains("code", true) -> {
+            "Code expired"
+        }
+        exceptionMessage.contains("email", true) -> {
+            "Invalid email"
+        }
+        exceptionMessage.contains("exists", true) -> {
+            "User with this email already exists"
+        }
+        exceptionMessage.contains("operation", true) -> {
+            "Web operation failed"
+        }
+        exceptionMessage.contains("invalid user", true) -> {
+            "Invalid user"
+        }
+        exceptionMessage.contains("multi-factor authentication required", true) -> {
+            "Multi-factor authentication required"
+        }
+        exceptionMessage.contains("recent login required", true) -> {
+            "Recent login required"
+        }
+        exceptionMessage.contains("firebase auth login failed", true) -> {
+            "Firebase auth login failed"
+        }
+        else -> {
+            "Firebase login failed, try again later"
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.cocktapp.screens.login
 
+import FetchingState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -82,7 +84,7 @@ fun LoginForm(
     val modifier = Modifier
 
         .background(Color.White)
-        .height(370.dp)
+        .height(460.dp)
         .verticalScroll(rememberScrollState())
 
     Column(
@@ -114,9 +116,7 @@ fun LoginForm(
             }
         )
 
-        if(loginScreenViewModel.loading.value==true){
-            CircularProgressIndicator()
-        }
+        RenderProperStateChangeReaction(loginScreenViewModel.state)
 
         SubmitButtonField(
             text = "Login",
@@ -147,5 +147,15 @@ fun LoginForm(
 
 
 
+@Composable
+fun RenderProperStateChangeReaction(state: MutableState<FetchingState>){
+    if(state.value==FetchingState.LOADING){
+        Text(text = state.value.message)
+        CircularProgressIndicator()
+    }
+    else {
+        Text(text = state.value.message)
+    }
+}
 
 

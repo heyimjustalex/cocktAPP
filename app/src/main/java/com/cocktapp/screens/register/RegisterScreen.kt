@@ -59,7 +59,6 @@ fun RegisterScreen(navController: NavController, registerScreenViewModel: Regist
 @Composable
 fun RegisterForm(
     loading:Boolean = false,
-    isCreateAccount:Boolean = false,
     onDone:(String,String) -> Unit = { s: String, s1: String -> } ,
     registerScreenViewModel: RegisterScreenViewModel,
     navController:NavController
@@ -86,7 +85,7 @@ fun RegisterForm(
     }
 
     val modifier = Modifier
-        .height(370.dp)
+        .height(460.dp)
         .background(Color.White)
         .verticalScroll(rememberScrollState())
 
@@ -124,7 +123,7 @@ fun RegisterForm(
         RenderProperStateChangeReaction(registerScreenViewModel.state)
 
         SubmitButtonField(
-            text = if (isCreateAccount) "Create Account" else "Register",
+            text = "Register",
             loading = loading,
             inputsAreValid = isValid,
             onClick = {

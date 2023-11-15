@@ -47,14 +47,14 @@ class RegisterScreenViewModel :ViewModel() {
                     onSuccess()
                 }
                 else {
-                    val message = getMessageForFirebaseException(task.exception)
+                    val message = getMessageForFirebaseExceptionRegister(task.exception)
                     state.value = FetchingState.FAILED_INSTANCE.withMessage(message)
                     Log.d("Register", task.exception.toString())
 
                 }
             }
         } catch (e: Exception) {
-            val message = getMessageForFirebaseException(e)
+            val message = getMessageForFirebaseExceptionRegister(e)
             state.value = FetchingState.FAILED.withMessage(message)
             Log.e("Register", "Exception during user registration", e)
         }
@@ -62,20 +62,24 @@ class RegisterScreenViewModel :ViewModel() {
 
 }
 
-fun getMessageForFirebaseException(exception: Exception?): String {
-    when (exception) {
-        is FirebaseAuthUserCollisionException -> {
-            return "User already exists"
+fun getMessageForFirebaseExceptionRegister(exception: Exception?): String {
+    var exceptionMessage = ""
+    if (exception != null) {
+        exceptionMessage = exception.localizedMessage.orEmpty()
+        Log.d("EXC", exception.message.toString())
+    }
+    return when {
+        exceptionMessage.contains("already", true) -> {
+            "User already exists"
         }
+        exceptionMessage.contains("code", true) -> {
+            "Code expired"
+        }
+        exceptionMessage.contains("password", true) -> {
+            "Weak password"        }
 
-        is FirebaseAuthActionCodeException -> {
-            return "Code expired"
-        }
-        is FirebaseAuthException -> {
-            return "Firebase auth register failed"
-        }
         else -> {
-            return "Firebase failed, try again later"
+            "Firebase registration failed, try again later"
         }
     }
 }
