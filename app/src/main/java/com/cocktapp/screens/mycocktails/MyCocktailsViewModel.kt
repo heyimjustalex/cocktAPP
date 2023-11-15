@@ -1,4 +1,4 @@
-package com.cocktapp.screens
+package com.cocktapp.screens.mycocktails
 
 import android.util.Log
 import androidx.compose.runtime.MutableState

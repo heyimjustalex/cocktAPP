@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cocktapp.model.FUser
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -23,7 +24,7 @@ class RegisterScreenViewModel :ViewModel() {
     ) = viewModelScope.launch {
 
         state.value = FetchingState.LOADING.withMessage("Wait...")
-        delay(3000)
+        delay(400)
 
         try {
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
@@ -49,10 +50,11 @@ class RegisterScreenViewModel :ViewModel() {
     }
     fun createUserInDifferentCollection(displayName:String?){
         val userId = auth.currentUser?.uid
-        val user = mutableMapOf<String,Any>()
-        user["user_id"]=  userId.toString()
-        user["displayName"] = displayName.toString()
-        FirebaseFirestore.getInstance().collection("users").add(user)
+        val user = displayName?.let { FUser(id=userId,displayName= it) }?.toMap()
+
+        if (user != null) {
+            FirebaseFirestore.getInstance().collection("users").add(user)
+        }
     }
 
 }

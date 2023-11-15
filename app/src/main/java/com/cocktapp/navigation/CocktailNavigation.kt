@@ -5,10 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cocktapp.screens.EntryLoadingScreen
+import com.cocktapp.screens.entryloadingscreen.EntryLoadingScreen
 import com.cocktapp.screens.login.LoginScreen
-import com.cocktapp.screens.MainScreen
-import com.cocktapp.screens.MyCocktailsScreen
+import com.cocktapp.screens.main.MainScreen
+import com.cocktapp.screens.mycocktails.MyCocktailsScreen
 import com.cocktapp.screens.register.RegisterScreen
 
 @Composable

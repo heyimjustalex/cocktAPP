@@ -1,4 +1,4 @@
-package com.cocktapp.screens
+package com.cocktapp.screens.entryloadingscreen
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.repeatable
@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import com.cocktapp.R
 import com.cocktapp.navigation.AvaliableScreens
 import com.cocktapp.ui.theme.CocktailFonts
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
@@ -47,7 +48,13 @@ fun EntryLoadingScreen(navController: NavController) {
             animation = tween(300),
             repeatMode = RepeatMode.Reverse
         ) )
-        navController.navigate(AvaliableScreens.LoginScreen.name)
+        if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
+            navController.navigate(AvaliableScreens.LoginScreen.name)
+        }
+        else{
+            navController.navigate(AvaliableScreens.MainScreen.name)
+        }
+//        navController.navigate(AvaliableScreens.LoginScreen.name)
     })
 
     Surface (modifier=Modifier.fillMaxSize(), color = Color.White) {

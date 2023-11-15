@@ -1,4 +1,4 @@
-package com.cocktapp.screens
+package com.cocktapp.screens.main
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
