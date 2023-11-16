@@ -5,7 +5,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -29,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.cocktapp.components.BigMainScreenButton
 import com.cocktapp.navigation.AvaliableScreens
 import com.cocktapp.navigation.NavbarForScaffoldWithLogout
 import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
@@ -54,21 +57,24 @@ fun MainScreen(navController: NavController)
 
             ) {
             Column(
-                modifier = Modifier.padding(2.dp),
+             //   modifier = Modifier.padding(2.dp),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
+
             ) {
 
-
-                Button(onClick = { navController.navigate(AvaliableScreens.MyCocktailsScreen.name) }) {
-                    Text(text = "My cocktails")
-
+                BigMainScreenButton(text = "My cocktails") {
+                    navController.navigate(AvaliableScreens.MyCocktailsScreen.name)
                 }
-                Button(onClick = { navController.navigate(AvaliableScreens.CocktailSearchScreen.name) }) {
-                    Text(text = "Search cocktails")
 
+                BigMainScreenButton(text = "Search cocktails") {
+                    navController.navigate(AvaliableScreens.CocktailSearchScreen.name)
                 }
-                Button(onClick = {
+
+                BigMainScreenButton(text = "Find a bar") {
                     // FIRST WAY OF DOING IT (PREFERRED)
                     // Here you should start Find a bar activity that will call google maps application
 
@@ -76,11 +82,8 @@ fun MainScreen(navController: NavController)
                     // If there is no way of calling app, you can go for creating new screen (Avaliable screens for routing, and
                     // then like in "screens" package every other screen with viewModel
                     // and then calling navcontroller here to redirect to viewModel
-
-                }) {
-                    Text(text = "Find a bar")
-
                 }
+
             }
 
         }
