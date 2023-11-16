@@ -45,19 +45,29 @@ fun MainScreen(navController: NavController)
             verticalArrangement = Arrangement.Center
         ) {
 
-            Text(
-                text = AnnotatedString("Still fuck you, Cesar!", ParagraphStyle(textAlign = TextAlign.Center)),
-                fontFamily = CocktailFonts.dancingScriptFamily,
-                fontStyle = FontStyle.Normal,
-                fontWeight = FontWeight.Medium,
-                fontSize = 50.sp
 
-            )
 
          Button(onClick = { navController.navigate(AvaliableScreens.MyCocktailsScreen.name)}) {
              Text(text = "My cocktails")
 
          }
+            Button(onClick = { navController.navigate(AvaliableScreens.CocktailSearchScreen.name)}) {
+                Text(text = "Search cockatils")
+
+            }
+            Button(onClick = {
+                // FIRST WAY OF DOING IT (PREFERRED)
+                // Here you should start Find a bar activity that will call google maps application
+
+                // SECOND WAY OF DOING IT
+                // If there is no way of calling app, you can go for creating new screen (Avaliable screens for routing, and
+                // then like in "screens" package every other screen with viewModel
+                // and then calling navcontroller here to redirect to viewModel
+
+            }) {
+                Text(text = "Find a bar")
+
+            }
         }
 
     }

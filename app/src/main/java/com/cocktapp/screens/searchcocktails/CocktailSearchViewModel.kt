@@ -1,21 +1,22 @@
-package com.cocktapp.screens.mycocktails
+package com.cocktapp.screens.searchcocktails
 
-import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.cocktapp.model.Cocktails
 import com.cocktapp.repository.CocktailRepository
 import com.cocktapp.wrappers.DataRequestWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-@HiltViewModel
-class MyCocktailsViewModel @Inject constructor(private val cocktailRepository: CocktailRepository) :ViewModel() {
 
-    // Its an example for external api, there should be firebase api to get only our cocktails
-    // Im leaving it only to let you know how it's supposed to be done
+
+
+@HiltViewModel
+class CocktailSearchViewModel @Inject constructor(private val cocktailRepository: CocktailRepository) :
+    ViewModel() {
+
+    // There you have some functions calling repository for external api
+    // so you know how to fetch data in order to search it
+    // if you want to see how to process it you need to look at DataRequestWrapper, Repository, Model, CocktailAPI Classes
+
     suspend fun getCocktailsByName(name:String = "a"): DataRequestWrapper<Cocktails, String, Exception> {
         return cocktailRepository.getCocktailsByName(name)
     }

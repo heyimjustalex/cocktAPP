@@ -10,6 +10,7 @@ import com.cocktapp.screens.login.LoginScreen
 import com.cocktapp.screens.main.MainScreen
 import com.cocktapp.screens.mycocktails.MyCocktailsScreen
 import com.cocktapp.screens.register.RegisterScreen
+import com.cocktapp.screens.searchcocktails.CocktailSearchScreen
 
 @Composable
 fun CocktailNavigation() {
@@ -33,6 +34,9 @@ fun CocktailNavigation() {
         }
         composable( AvaliableScreens.RegisterScreen.name){
             RegisterScreen(navController)
+        }
+        composable( AvaliableScreens.CocktailSearchScreen.name){
+            CocktailSearchScreen(navController)
         }
     }
 }
