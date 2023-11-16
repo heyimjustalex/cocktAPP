@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.cocktapp.navigation.AvaliableScreens
 import com.cocktapp.ui.theme.CocktailBlackColor
+import com.cocktapp.ui.theme.CocktailDarkGrayColor
 import com.cocktapp.ui.theme.CocktailLightGrayColor
 import com.cocktapp.ui.theme.CocktailOrangeColor
 import com.cocktapp.ui.theme.CocktailWhiteColor
@@ -105,7 +106,8 @@ fun InputField(
             unfocusedBorderColor = CocktailBlackColor,
             textColor = Color(0, 0, 0),
             focusedSupportingTextColor = Color(255, 255, 255),
-            unfocusedSupportingTextColor = Color(255, 255, 255)
+            unfocusedSupportingTextColor = Color(255, 255, 255),
+            disabledTextColor = Color.Gray,
 
         )
 
@@ -175,7 +177,9 @@ fun PasswordInputField(modifier: Modifier,
             unfocusedBorderColor = CocktailBlackColor,
             textColor = Color(0, 0, 0),
             focusedSupportingTextColor = Color(255, 255, 255),
-            unfocusedSupportingTextColor = Color(255, 255, 255)
+            unfocusedSupportingTextColor = Color(255, 255, 255),
+            disabledTextColor = Color.Gray,
+
 
         )
 
@@ -208,8 +212,8 @@ fun SubmitButtonField(text: String,
         colors = ButtonDefaults.buttonColors(
             containerColor = CocktailBlackColor,
             contentColor = CocktailWhiteColor,
-            disabledContentColor = CocktailWhiteColor,
-            disabledContainerColor = CocktailBlackColor
+            disabledContentColor = CocktailBlackColor,
+            disabledContainerColor = CocktailDarkGrayColor
         ),
         onClick = onClick,
         enabled = !loading && inputsAreValid,
