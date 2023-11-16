@@ -26,8 +26,6 @@ class LoginScreenViewModel :ViewModel() {
                 if (task.isSuccessful) {
                     state.value = FetchingState.SUCCESS.withMessage("Success!")
 
-
-
                     Log.d("LOGIN", "Success logging in TASK: ${task.result}")
 
                     onSuccess()

@@ -32,6 +32,9 @@ import com.cocktapp.components.PasswordInputField
 import com.cocktapp.components.SubmitButtonField
 import com.cocktapp.navigation.AvaliableScreens
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.cocktapp.components.HeaderLoginRegister
+import com.cocktapp.ui.theme.CocktailOrangeColor
+import com.google.common.base.Splitter
 
 @Composable
 fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenViewModel = viewModel()){
@@ -39,22 +42,26 @@ fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenV
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .background(CocktailOrangeColor)
+
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text("This is the login screen")
+            HeaderLoginRegister(text = "Welcome")
+            HeaderLoginRegister(text = "Please Login or Register")
             LoginForm(loginScreenViewModel = loginScreenViewModel, navController = navController)
+            Column (modifier=Modifier.padding(0.dp,50.dp,0.dp,0.dp)){
+
 
             BottomFormRedirectButton(navController,AvaliableScreens.RegisterScreen.name,"Click here to sign up!")
+            }
         }
     }
 }
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginForm(
-    onDone:(String,String) -> Unit = { s: String, s1: String -> },
     loginScreenViewModel: LoginScreenViewModel,
     navController:NavController
 
@@ -80,8 +87,7 @@ fun LoginForm(
     val stateValue = loginScreenViewModel.state.value
     val modifier = Modifier
 
-        .background(Color.White)
-        .height(460.dp)
+        .background(CocktailOrangeColor)
         .verticalScroll(rememberScrollState())
 
     Column(
@@ -108,7 +114,10 @@ fun LoginForm(
             onAction = KeyboardActions {
                 if (!isValid) return@KeyboardActions
                 else {
-                    onDone(email.value.trim(), password.value.trim())
+//                    run {
+//                        email.value.trim()
+//                        password.value.trim()
+//                    }
                     if (keyboardController != null) {
                         keyboardController.hide()
 
@@ -124,7 +133,10 @@ fun LoginForm(
             loading = stateValue==FetchingState.LOADING,
             inputsAreValid = isValid,
             onClick = {
-                onDone(email.value.trim(), password.value.trim())
+//                run {
+//                    email.value.trim()
+//                    password.value.trim()
+//                }
                 if (keyboardController != null) {
                     keyboardController.hide()
                 }

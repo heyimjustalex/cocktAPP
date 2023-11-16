@@ -1,5 +1,6 @@
 package com.cocktapp.screens.main
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,48 +30,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.cocktapp.navigation.AvaliableScreens
+import com.cocktapp.navigation.NavbarForScaffoldWithLogout
+import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
 import com.cocktapp.ui.theme.CocktailFonts
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavController)
 {
-    Surface(
-        modifier = Modifier
-            .padding(15.dp)
-            .fillMaxSize()      ,
-        color = Color.White,
+    Scaffold(
+        topBar = { NavbarForScaffoldWithLogout(navController = navController, "Home") },
+        contentColor = Color.Black
+
 
     ) {
-        Column(
-            modifier = Modifier.padding(2.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
+
+        Surface(
+            modifier = Modifier
+                .padding(15.dp)
+                .fillMaxSize(),
+            color = Color.White,
+
+            ) {
+            Column(
+                modifier = Modifier.padding(2.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
 
 
+                Button(onClick = { navController.navigate(AvaliableScreens.MyCocktailsScreen.name) }) {
+                    Text(text = "My cocktails")
 
-         Button(onClick = { navController.navigate(AvaliableScreens.MyCocktailsScreen.name)}) {
-             Text(text = "My cocktails")
+                }
+                Button(onClick = { navController.navigate(AvaliableScreens.CocktailSearchScreen.name) }) {
+                    Text(text = "Search cocktails")
 
-         }
-            Button(onClick = { navController.navigate(AvaliableScreens.CocktailSearchScreen.name)}) {
-                Text(text = "Search cockatils")
+                }
+                Button(onClick = {
+                    // FIRST WAY OF DOING IT (PREFERRED)
+                    // Here you should start Find a bar activity that will call google maps application
 
+                    // SECOND WAY OF DOING IT
+                    // If there is no way of calling app, you can go for creating new screen (Avaliable screens for routing, and
+                    // then like in "screens" package every other screen with viewModel
+                    // and then calling navcontroller here to redirect to viewModel
+
+                }) {
+                    Text(text = "Find a bar")
+
+                }
             }
-            Button(onClick = {
-                // FIRST WAY OF DOING IT (PREFERRED)
-                // Here you should start Find a bar activity that will call google maps application
 
-                // SECOND WAY OF DOING IT
-                // If there is no way of calling app, you can go for creating new screen (Avaliable screens for routing, and
-                // then like in "screens" package every other screen with viewModel
-                // and then calling navcontroller here to redirect to viewModel
-
-            }) {
-                Text(text = "Find a bar")
-
-            }
         }
-
     }
 }
