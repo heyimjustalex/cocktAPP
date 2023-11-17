@@ -19,12 +19,14 @@ import javax.inject.Singleton
 // in which the module will be installed. In this case, it's installed in the SingletonComponent,
 // which means the provided dependencies will have a singleton scope.
 
+// Dagger Hilt module is responsible for providing a singleton instance of the CocktailAPI interface,
+// configured with the necessary settings for making API calls related to cocktails in an Android application.
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
     @Provides
     @Singleton
-    fun provideOpenWeatherApi(): CocktailAPI {
+    fun provideCocktailApi(): CocktailAPI {
         return Retrofit.Builder() // package that simplifies usage of HTTP
             .baseUrl(Const.BASE_URL) // our base api url
             .addConverterFactory(GsonConverterFactory.create()) // converter for json -> kotlin
