@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "21525943223",
+    "project_id": "cocktapp-6cc4b",
+    "storage_bucket": "cocktapp-6cc4b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21525943223:android:1189c5a074930d44c30e32",
+        "android_client_info": {
+          "package_name": "com.cocktapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEJnWL0Zs43pTU00Khz1Dg6BdQ24-D1Ls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
