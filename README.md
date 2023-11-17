@@ -1,4 +1,17 @@
-﻿# CocktAPP
+﻿# 🍹 CocktAPP 🍸
+
+Discover the world of drinks with the CocktAPP! 🌍🍹 CocktAPP is built with Jetpack Compose, the modern UI 🔄 toolkit for building native Android applications. 
+
+🔍 Search and explore a vast collection of cocktail recipes right at your fingertips. From classic concoctions to trendy mixes, find the perfect drink for any occasion.
+
+➕ Create and customize your own cocktail recipes with ease. Mix and match ingredients, share your unique creations, and become the master mixologist among your friends! 🍹👨‍🍳
+
+🌐 Share your favorite recipes with friends and spread the joy. Whether it's a refreshing cocktail or a sophisticated one, the CocktAPP is your passport to the world of delicious beverages. Cheers to unforgettable moments and endless flavor possibilities! 🥂🎉
+
+## Dependencies
+- Firebase: for authenticaiton and storing data
+- Retrofit: Type-safe HTTP client for Android and Java.
+- Dagger Hilt: Dependency injection library for Android.
 
 ## Git workflow
 
