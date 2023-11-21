@@ -13,6 +13,7 @@ import com.cocktapp.screens.main.MainScreen
 import com.cocktapp.screens.mycocktails.MyCocktailsScreen
 import com.cocktapp.screens.register.RegisterScreen
 import com.cocktapp.screens.searchcocktails.CocktailSearchScreen
+import com.cocktapp.screens.cocktailDetails.CocktailDetailsScreen
 
 @Composable
 fun CocktailNavigation() {
@@ -54,5 +55,8 @@ fun CocktailNavigation() {
 //                backStackEntry ->
 //            DetailsScreen(navController = navController,backStackEntry.arguments?.getString("movie"))
 //        }
+        composable( AvaliableScreens.CocktailDetailsScreen.name){
+            CocktailDetailsScreen(navController)
+        }
     }
 }

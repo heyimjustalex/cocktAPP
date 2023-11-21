@@ -1,3 +1,3 @@
 package com.cocktapp.model
 
-class Cocktails : ArrayList<Cocktail>()
+class Cocktails(cocktailList: MutableList<Cocktail> = ArrayList()) : ArrayList<Cocktail>(cocktailList)
