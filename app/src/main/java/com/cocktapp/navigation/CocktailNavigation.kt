@@ -14,6 +14,7 @@ import com.cocktapp.screens.mycocktails.MyCocktailsScreen
 import com.cocktapp.screens.register.RegisterScreen
 import com.cocktapp.screens.searchcocktails.CocktailSearchScreen
 import com.cocktapp.screens.cocktailDetails.CocktailDetailsScreen
+import com.cocktapp.screens.addCocktail.CocktailAddScreen
 
 @Composable
 fun CocktailNavigation() {
@@ -41,7 +42,9 @@ fun CocktailNavigation() {
         composable( AvaliableScreens.CocktailSearchScreen.name){
             CocktailSearchScreen(navController)
         }
-
+        composable( AvaliableScreens.CocktailAddScreen.name){
+            CocktailAddScreen(navController)
+        }
         // Example on how to do details with argument passing from other app i wrote
 //        composable(
 //            MovieScreens.DetailsScreen.name+"/{movie}",
