@@ -13,6 +13,7 @@ enum class AvaliableScreens {
     CocktailSearchScreen,
     LoginScreen,
     RegisterScreen;
+
     companion object {
 
         fun fromRoute(route: String): AvaliableScreens =

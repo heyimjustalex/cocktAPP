@@ -1,5 +1,6 @@
 package com.cocktapp.navigation
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -13,6 +14,8 @@ import com.cocktapp.screens.main.MainScreen
 import com.cocktapp.screens.mycocktails.MyCocktailsScreen
 import com.cocktapp.screens.register.RegisterScreen
 import com.cocktapp.screens.searchcocktails.CocktailSearchScreen
+import com.cocktapp.screens.cocktailDetails.CocktailDetailsScreen
+import com.cocktapp.screens.addCocktail.CocktailAddScreen
 
 @Composable
 fun CocktailNavigation() {
@@ -40,19 +43,21 @@ fun CocktailNavigation() {
         composable( AvaliableScreens.CocktailSearchScreen.name){
             CocktailSearchScreen(navController)
         }
+        composable( AvaliableScreens.CocktailAddScreen.name){
+            CocktailAddScreen(navController)
+        }
+        composable(
+            "${AvaliableScreens.CocktailDetailsScreen.name}/?cocktail={cocktail}",
+            arguments = listOf(
+                navArgument("cocktail") {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val encodedCocktail = backStackEntry.arguments?.getString("cocktail")
+            val decodedCocktail = Uri.decode(encodedCocktail)
+            CocktailDetailsScreen(navController, decodedCocktail)
+        }
 
-        // Example on how to do details with argument passing from other app i wrote
-//        composable(
-//            MovieScreens.DetailsScreen.name+"/{movie}",
-//            arguments = listOf(
-//                navArgument(name="movie")
-//                {
-//                    type= NavType.StringType
-//                }
-//            )
-//        ){
-//                backStackEntry ->
-//            DetailsScreen(navController = navController,backStackEntry.arguments?.getString("movie"))
-//        }
     }
 }

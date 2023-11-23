@@ -9,7 +9,7 @@ Discover the world of drinks with the CocktAPP! 🌍🍹 CocktAPP is built with 
 🌐 Share your favorite recipes with friends and spread the joy. Whether it's a refreshing cocktail or a sophisticated one, the CocktAPP is your passport to the world of delicious beverages. Cheers to unforgettable moments and endless flavor possibilities! 🥂🎉
 
 ## Dependencies
-- Firebase: for authenticaiton and storing data
+- Firebase: for authenticaiton and storing data.
 - Retrofit: Type-safe HTTP client for Android and Java.
 - Dagger Hilt: Dependency injection library for Android.
 
