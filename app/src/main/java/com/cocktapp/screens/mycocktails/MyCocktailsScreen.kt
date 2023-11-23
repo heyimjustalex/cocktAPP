@@ -1,6 +1,7 @@
 package com.cocktapp.screens.mycocktails
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.cocktapp.components.CocktailsList
 import com.cocktapp.model.Cocktail
 import com.cocktapp.model.Cocktails
 import com.cocktapp.navigation.AvaliableScreens
@@ -50,7 +52,6 @@ fun MyCocktailsScreen(navController: NavController, myCocktailsViewModel: MyCock
         topBar = { NavbarForScaffoldWithLogoutAndBackButton(navController = navController, "My cocktails") },
         contentColor = Color.Black
 
-
     ) {
         Surface(
             modifier = Modifier
@@ -60,13 +61,9 @@ fun MyCocktailsScreen(navController: NavController, myCocktailsViewModel: MyCock
 
             ) {
             Column(
-                //modifier = Modifier.padding(2.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-
-                //Text(text = "My cocktails screen")
-
                 ShowData(myCocktailsViewModel = myCocktailsViewModel, navController = navController)
             }
 
@@ -109,55 +106,6 @@ fun ShowData(myCocktailsViewModel: MyCocktailsViewModel, navController: NavContr
         Text(
             text = "No cocktails found, data is null"
         )
-    }
-}
-
-
-
-
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun CocktailsList(cocktails: List<Cocktail>, navController: NavController) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        itemsIndexed(cocktails) { index, cocktail ->
-            CocktailCard(cocktail = cocktail, number = index + 1, navController = navController)
-        }
-    }
-}
-
-@Composable
-fun CocktailCard(cocktail: Cocktail, number: Int, navController: NavController) {
-
-    val isEven = number % 2 == 0
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = if (isEven){
-                    Color.Gray
-                } else {
-                    Color.LightGray
-                }
-            )
-            .clickable{
-                navController.navigate(AvaliableScreens.CocktailDetailsScreen.name)
-            }
-            .padding(36.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "${cocktail.name.uppercase()}",
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-            )
-            Text(text = "Number of Ingredients: ${cocktail.ingredients.size}", color = Color.Black)
-        }
     }
 }
 
