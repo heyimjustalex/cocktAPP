@@ -5,8 +5,12 @@ import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -15,7 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.cocktapp.model.Cocktail
@@ -49,24 +57,77 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String) 
     ) {
         Surface(
             modifier = Modifier
-                .padding(15.dp)
+                .padding(20.dp)
                 .fillMaxSize(),
             color = Color.White,
 
             ) {
             Column(
                 modifier = Modifier.padding(2.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                //horizontalAlignment = Alignment.CenterHorizontally,
+                //verticalArrangement = Arrangement.Center
             ) {
+                Row(
+                    modifier = Modifier.padding(top = 80.dp, bottom = 40.dp)
+                ) {
+                    Text(
+                        text = name,
+                        color = Color.Black,
+                        style = TextStyle(
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+                Row {
+                    Text(
+                        text = "INSTRUCTIONS",
+                        color = Color.Black,
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+                Row(
+                    modifier = Modifier.padding(bottom = 30.dp)
+                ) {
+                    Text(
+                        text = instructions
+                    )
+                }
 
-                Text(text = "Cocktail Details screen")
-                Text(text = "NAME -> ${name}", color = Color.Black)
-                Text(text = "INSTRUCTIONS -> ${instructions}", color = Color.Black)
-                Text(text = "INGREDIENTS -> ${ingredientsList}", color = Color.Black)
+                Divider(
+                    color = Color.Gray,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(bottom = 30.dp)
+                )
 
+
+                Row {
+                    Text(
+                        text = "INGREDIENTS",
+                        color = Color.Black,
+                        style = TextStyle(
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+                LazyColumn {
+                    items(ingredientsList.size) { index ->
+                        Text(
+                            text = ingredientsList[index],
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .fillMaxWidth(),
+                            textAlign = TextAlign.Left,
+                        )
+                    }
+                }
             }
 
+
+                //Text(text = "INSTRUCTIONS -> ${instructions}", color = Color.Black)
+                //Text(text = "INGREDIENTS -> ${ingredientsList}", color = Color.Black)
         }
     }
 }
