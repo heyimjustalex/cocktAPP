@@ -1,6 +1,9 @@
 package com.cocktapp.screens.main
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ParagraphStyle
@@ -30,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.cocktapp.components.BigMainScreenButton
 import com.cocktapp.navigation.AvaliableScreens
@@ -45,7 +50,6 @@ fun MainScreen(navController: NavController)
     Scaffold(
         topBar = { NavbarForScaffoldWithLogout(navController = navController, "Home") },
         contentColor = Color.Black
-
 
     ) {
 
@@ -71,10 +75,28 @@ fun MainScreen(navController: NavController)
                 }
 
                 BigMainScreenButton(text = "Search cocktails") {
+                    println("test")
                     navController.navigate(AvaliableScreens.CocktailSearchScreen.name)
                 }
 
+                val context = LocalContext.current
+
                 BigMainScreenButton(text = "Find a bar") {
+                    val gmmIntentUri = Uri.parse("geo:0,0?q=bars near me")
+                    val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                    mapIntent.setPackage("com.google.android.apps.maps")
+                    context.startActivity(mapIntent)
+
+
+                    //val intent = Intent(
+                    //    Intent.ACTION_VIEW,
+                    //    Uri.parse("geo:56.119605, 10.158907")
+                    //)
+
+                    //startActivity(intent)
+
+
+
                     // FIRST WAY OF DOING IT (PREFERRED)
                     // Here you should start Find a bar activity that will call google maps application
 
