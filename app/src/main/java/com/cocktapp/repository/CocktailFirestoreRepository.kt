@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class CocktailFirestoreRepository @Inject constructor() {
 
-    val firestore = FirebaseFirestore.getInstance()
+    private val firestore = FirebaseFirestore.getInstance()
 
     suspend fun getCocktailsFirestore() : DataRequestWrapper<Cocktails, String, Exception> {
 
