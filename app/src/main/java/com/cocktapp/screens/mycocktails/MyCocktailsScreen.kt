@@ -55,7 +55,7 @@ fun MyCocktailsScreen(navController: NavController, myCocktailsViewModel: MyCock
     ) {
         Surface(
             modifier = Modifier
-                .padding(top = 70.dp)
+                .padding(top = 60.dp)
                 .fillMaxSize(),
             color = Color.White,
 
