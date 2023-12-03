@@ -57,11 +57,12 @@ fun CocktailCard(cocktail: Cocktail, number: Int, navController: NavController) 
                 .padding(16.dp)
         ) {
             Text(
-                text = "${cocktail.name.uppercase()}",
+                text = "${cocktail.name.uppercase()} ",
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
             )
             Text(text = "Number of Ingredients: ${cocktail.ingredients.size}", color = Color.Black)
+            Text(text = "This Cocktail is from: ${cocktail.fromWhere}", color = Color.Black)
         }
     }
 }

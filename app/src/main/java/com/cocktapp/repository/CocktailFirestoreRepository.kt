@@ -42,7 +42,11 @@ class CocktailFirestoreRepository @Inject constructor() {
                         .get()
                         .await()
 
-                    Cocktails(result.toObjects(Cocktail::class.java))
+                    val cocktails = result.toObjects(Cocktail::class.java).map { cocktail ->
+                        cocktail.copy(fromWhere = "Firestore")
+                    }.toMutableList()
+
+                    Cocktails(cocktails)
                 } else {
                     throw Exception("User ID is null.")
                 }
