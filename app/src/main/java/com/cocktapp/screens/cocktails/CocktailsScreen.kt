@@ -33,7 +33,7 @@ fun ShowData(
     }.value
 
     if (cocktailData.state == "loading") {
-        Text(text = "My cocktails screen")
+        Text(text = "Cocktails screen")
         CircularProgressIndicator()
     } else if (cocktailData.data != null) {
         Log.d("DONE","LOADING DATA DONE")

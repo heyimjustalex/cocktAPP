@@ -46,7 +46,7 @@ fun CocktailSearchScreen(navController: NavController, cocktailSearchViewModel: 
                 Text(text = "Search cocktails screen")
 
                 ShowData(
-                    loadCocktails = { cocktailSearchViewModel.getCocktailsByName("Mojito") },
+                    loadCocktails = { cocktailSearchViewModel.getCocktailsByName("Sex") },
                     navController = navController
                 )
 
