@@ -57,4 +57,24 @@ class CocktailFirestoreRepository @Inject constructor() {
 
         return DataRequestWrapper(data = response)
     }
+
+    suspend fun getCocktailsFirestoreByName(name: String) : DataRequestWrapper<Cocktails, String, Exception> {
+
+        val response =
+            try{
+                val result = firestore.collection("myCocktails")
+                    .whereEqualTo("name", name)
+                    .get()
+                    .await()
+
+                Cocktails(result.toObjects(Cocktail::class.java))
+
+            }
+            catch (e:Exception){
+                Log.d("RESPONSE",e.stackTraceToString())
+                return DataRequestWrapper(exception = e)
+            }
+
+        return DataRequestWrapper(data = response)
+    }
 }
