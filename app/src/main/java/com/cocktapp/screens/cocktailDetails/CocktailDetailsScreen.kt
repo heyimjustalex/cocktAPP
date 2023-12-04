@@ -45,9 +45,16 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String) 
     val instructions = instructionsMatch?.groupValues?.get(1) ?: ""
 
     // Extract Name form cocktailString
-    val nameRegex = Regex("""name=([^,]+)(?:\))""")
+    val nameRegex = Regex("""name=([^,]+),""")
     val nameMatch = nameRegex.find(cocktailString)
     val name = nameMatch?.groupValues?.get(1)?.trim() ?: ""
+
+    // Extract fromWhere form cocktailString
+    val fromWhereRegex = Regex("""fromWhere=([^)]+)""")
+    val fromWhereMatch = fromWhereRegex.find(cocktailString)
+    val fromWhere = fromWhereMatch?.groupValues?.get(1)?.trim() ?: ""
+
+
 
     Scaffold(
         topBar = { NavbarForScaffoldWithLogoutAndBackButton(navController = navController, "Cocktail Details") },
