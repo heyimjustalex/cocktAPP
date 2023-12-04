@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.cocktapp.R
+import com.cocktapp.activities.ShareCocktailActivity
 import com.cocktapp.model.Cocktail
 import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
 
@@ -45,6 +47,8 @@ import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CocktailDetailsScreen(navController: NavController, cocktailString: String) {
+    //Context for the sharing activity
+    val context = LocalContext.current;
 
     // Extract Ingredients form cocktailString
     val ingredientsRegex = Regex("""ingredients=\[([^\]]+)\]""")
@@ -137,7 +141,7 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String) 
                 }
                 Box {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = {   ShareCocktailActivity.shareRecipe(context, Cocktail(ingredientsList, instructions, name)) },
                         modifier = Modifier
                             .offset(x = 300.dp, y = 120.dp)
                             .size(70.dp),
