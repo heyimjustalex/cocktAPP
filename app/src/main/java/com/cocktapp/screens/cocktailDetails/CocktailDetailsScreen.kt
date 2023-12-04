@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.cocktapp.R
+import com.cocktapp.activities.ShareCocktailActivity
 import com.cocktapp.model.Cocktail
 import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
 
@@ -45,6 +46,8 @@ import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CocktailDetailsScreen(navController: NavController, cocktailString: String) {
+
+    val context = LocalContext.current;
 
     // Extract Ingredients form cocktailString
     val ingredientsRegex = Regex("""ingredients=\[([^\]]+)\]""")
@@ -57,9 +60,16 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String) 
     val instructions = instructionsMatch?.groupValues?.get(1) ?: ""
 
     // Extract Name form cocktailString
-    val nameRegex = Regex("""name=([^,]+)(?:\))""")
+    val nameRegex = Regex("""name=([^,]+),""")
     val nameMatch = nameRegex.find(cocktailString)
     val name = nameMatch?.groupValues?.get(1)?.trim() ?: ""
+
+    // Extract fromWhere form cocktailString
+    val fromWhereRegex = Regex("""fromWhere=([^)]+)""")
+    val fromWhereMatch = fromWhereRegex.find(cocktailString)
+    val fromWhere = fromWhereMatch?.groupValues?.get(1)?.trim() ?: ""
+
+
 
     Scaffold(
         topBar = { NavbarForScaffoldWithLogoutAndBackButton(navController = navController, "Cocktail Details") },
@@ -157,8 +167,23 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String) 
             }
 
 
-                //Text(text = "INSTRUCTIONS -> ${instructions}", color = Color.Black)
-                //Text(text = "INGREDIENTS -> ${ingredientsList}", color = Color.Black)
+            Box {
+                Button(
+                    onClick = {   ShareCocktailActivity.shareRecipe(context, Cocktail(ingredientsList, instructions, name)) },
+                    modifier = Modifier
+                        .offset(x = 300.dp, y = 120.dp)
+                        .size(70.dp),
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF161616),
+                        contentColor = Color.White)
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.share),
+                        contentDescription = "Icon"
+                    )
+                }
+            }
         }
     }
 }
