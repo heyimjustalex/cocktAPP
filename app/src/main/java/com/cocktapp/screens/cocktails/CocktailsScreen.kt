@@ -2,10 +2,12 @@ package com.cocktapp.screens.cocktails
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -62,5 +64,45 @@ fun ShowData(
         Text(
             text = "No cocktails found, data is null"
         )
+    }
+}
+
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun ShowDataSearch(
+    loadCocktails: DataRequestWrapper<Cocktails, String, Exception>,
+    navController: NavController
+) {
+    when (loadCocktails.state) {
+        "loading" -> CircularProgressIndicator()
+        else -> {
+            if (loadCocktails.data != null && loadCocktails.data!!.isNotEmpty()) {
+                Log.d("DONE","LOADING DATA DONE")
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CocktailsList(
+                        cocktails = loadCocktails.data ?: emptyList(),
+                        navController = navController
+                    )
+
+                    Button(
+                        onClick = {
+                            navController.navigate(AvaliableScreens.CocktailAddScreen.name)
+                        },
+                        modifier = Modifier
+                            .padding(26.dp)
+                            .align(Alignment.BottomEnd)
+                            .height(56.dp)
+                        //.align(Alignment.BottomCenter) To align Horizontally center
+                    ) {
+                        Text(text = "Add")
+                    }
+                }
+            } else {
+                Text("No cocktails found")
+            }
+        }
     }
 }
