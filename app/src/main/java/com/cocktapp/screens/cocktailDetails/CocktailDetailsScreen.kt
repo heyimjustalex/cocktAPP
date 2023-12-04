@@ -3,6 +3,7 @@ package com.cocktapp.screens.cocktailDetails
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -141,6 +142,25 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String) 
                                 .padding(8.dp)
                                 .fillMaxWidth(),
                             textAlign = TextAlign.Left,
+                        )
+                    }
+                }
+                Box {
+                    Button(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier
+                            .offset(x = 300.dp, y = 120.dp)
+                            .size(70.dp),
+
+                        shape = CircleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF161616),
+                            contentColor = Color.White)
+
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.share), // SVG-Icon als Vektor-Drawable
+                            contentDescription = "Icon"
                         )
                     }
                 }
