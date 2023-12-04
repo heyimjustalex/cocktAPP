@@ -147,7 +147,7 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String) 
                 }
                 Box {
                     Button(
-                        onClick = { /*TODO*/ },
+                        onClick = { ShareCocktailActivity.shareRecipe(context, Cocktail(ingredientsList, instructions, name)) },
                         modifier = Modifier
                             .offset(x = 300.dp, y = 120.dp)
                             .size(70.dp),
@@ -159,29 +159,10 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String) 
 
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.share), // SVG-Icon als Vektor-Drawable
+                            imageVector = ImageVector.vectorResource(id = R.drawable.share),
                             contentDescription = "Icon"
                         )
                     }
-                }
-            }
-
-
-            Box {
-                Button(
-                    onClick = {   ShareCocktailActivity.shareRecipe(context, Cocktail(ingredientsList, instructions, name)) },
-                    modifier = Modifier
-                        .offset(x = 300.dp, y = 120.dp)
-                        .size(70.dp),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF161616),
-                        contentColor = Color.White)
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.share),
-                        contentDescription = "Icon"
-                    )
                 }
             }
         }
