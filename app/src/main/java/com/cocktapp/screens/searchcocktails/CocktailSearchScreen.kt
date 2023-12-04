@@ -1,10 +1,12 @@
 package com.cocktapp.screens.searchcocktails
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,10 +28,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.cocktapp.model.Cocktail
 import com.cocktapp.model.Cocktails
 import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
 import com.cocktapp.screens.cocktails.ShowData
+import com.cocktapp.screens.cocktails.ShowDataSearch
 import com.cocktapp.wrappers.DataRequestWrapper
+import kotlinx.coroutines.async
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,22 +75,31 @@ fun ShowDataCombined(name: String, cocktailSearchViewModel: CocktailSearchViewMo
     var cocktailData by remember { mutableStateOf(DataRequestWrapper<Cocktails, String, Exception>(state = "loading")) }
 
     LaunchedEffect(name) {
-        if (name.isNotEmpty()) {
-            cocktailData = cocktailSearchViewModel.getCocktailsByName(name)
-        } else {
-            cocktailData = DataRequestWrapper(state = "idle")
+        var name1 = name
+        var name2 = name
+        if (name.isEmpty()) {
+            name1 = ""
+            name2 = "a"
         }
-    }
-
-    when (cocktailData.state) {
-        "loading" -> CircularProgressIndicator()
-        "idle" -> Text("Please search something")
-        else -> {
-            if (cocktailData.data != null && cocktailData.data!!.isNotEmpty()) {
-                ShowData(loadCocktails = { cocktailData }, navController = navController)
-            } else {
-                Text("No cocktails found")
-            }
+        val firestoreCocktails = async {
+            cocktailSearchViewModel.getCocktailsFirestoreByName(name1)
         }
+        val firestoreCocktailsAll = async {
+            cocktailSearchViewModel.getCocktailsFirestoreAll()
+        }
+        val localCocktails = async { cocktailSearchViewModel.getCocktailsByName(name2) }
+        val firestoreResult =
+            if (name1.isEmpty()) firestoreCocktailsAll.await() else firestoreCocktails.await()
+        val localResult = localCocktails.await()
+        // Combine the results of firestoreCocktails and localCocktails
+        val mergedData =
+            (firestoreResult.data?.toList() ?: listOf()) + (localResult.data?.toList()
+                ?: listOf())
+        // Convert mergedData to a MutableList<Cocktail>
+        val cocktailList = mergedData.filterIsInstance<Cocktail>().toMutableList()
+        // Create a Cocktails object with the MutableList<Cocktail>
+        val cocktails = Cocktails(cocktailList)
+        cocktailData = DataRequestWrapper(state = firestoreResult.state, data = cocktails)
     }
+    ShowDataSearch(loadCocktails = cocktailData, navController = navController)
 }
