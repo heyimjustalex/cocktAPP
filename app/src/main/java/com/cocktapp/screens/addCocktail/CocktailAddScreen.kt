@@ -1,49 +1,280 @@
 package com.cocktapp.screens.addCocktail
 
+import FetchingState
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
+import com.cocktapp.components.InputField
+import com.cocktapp.components.ResizableMultiLineInputField
+import com.cocktapp.components.SubmitButtonField
+import com.cocktapp.navigation.EditableNavbarForScaffoldWithLogoutAndBackButton
+import com.cocktapp.screens.register.RegisterScreenViewModel
+import com.cocktapp.ui.theme.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
+data class CocktailFormData(
+    val ingredients: MutableList<String>,
+    val inputIngredients: MutableState<String>,
+    val inputPreparation: MutableState<String>,
+    val cocktailName: MutableState<String>
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CocktailAddScreen(navController: NavController){
+fun CocktailAddScreen(navController: NavController) {
+    var formData by remember {
+        mutableStateOf(
+            CocktailFormData(
+                mutableStateListOf(),
+                mutableStateOf(""),
+                mutableStateOf(""),
+                mutableStateOf("New Cocktail")
+            )
+        )
+    }
+
+    val isRecipePrivate = remember { mutableStateOf(false) }
+    val registerScreenViewModel: RegisterScreenViewModel = viewModel()
+    val stateValue = registerScreenViewModel.state.value
 
     Scaffold(
-        topBar = { NavbarForScaffoldWithLogoutAndBackButton(navController = navController, "Add Cocktail") },
+        topBar = {
+            EditableNavbarForScaffoldWithLogoutAndBackButton(
+                navController = navController,
+                defaultTitle = "New Cocktail",
+                onSave = { newValue -> formData.cocktailName.value = newValue }
+            )
+        },
         contentColor = Color.Black
-
-
     ) {
-        Surface(
+        Column(
             modifier = Modifier
-                .padding(15.dp)
-                .fillMaxSize(),
-            color = Color.White,
+                .padding(30.dp)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Ingredients(formData.ingredients, formData.inputIngredients, stateValue)
+            Preparation(formData.inputPreparation, isRecipePrivate)
 
-            ) {
             Column(
-                modifier = Modifier.padding(2.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier.fillMaxWidth(),
             ) {
+                SubmitButtonField(
+                    text = "Create cocktail",
+                    loading = stateValue == FetchingState.LOADING,
+                    inputsAreValid = inputIsValid(formData),
+                    containerColor = CocktailOrangeColor,
+                    contentColor = CocktailBlackColor,
+                    disabledContentColor = CocktailBlackColor,
+                    disabledContainerColor = CocktailDarkGrayColor,
+                    onClick = {
+                        val flatCocktailData = mapOf(
+                            "ingredients" to formData.ingredients.toList(),
+                            "instructions" to formData.inputPreparation.value,
+                            "name" to formData.cocktailName.value
+                        )
+                        saveCocktail(flatCocktailData, isRecipePrivate.value)
 
-                Text(text = "Add Cocktail")
+                        formData = CocktailFormData(
+                            mutableStateListOf(),
+                            mutableStateOf(""),
+                            mutableStateOf(""),
+                            mutableStateOf("New Cocktail")
+                        )
+                        isRecipePrivate.value = false
+                    }
+                )
             }
-
         }
     }
+}
+
+@Composable
+fun inputIsValid(formData: CocktailFormData): Boolean {
+    return formData.cocktailName.value.isNotBlank() &&
+            formData.ingredients.all { it.isNotBlank() } &&
+            formData.inputPreparation.value.isNotBlank()
+}
+
+@Composable
+fun Ingredients(
+    ingredients: MutableList<String>,
+    inputIngredients: MutableState<String>,
+    stateValue: FetchingState
+) {
+    Row(
+        modifier = Modifier
+            .padding(top = 50.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(top = 7.dp)
+        ) {
+            Text(
+                text = "Ingredients",
+                style = LocalTextStyle.current.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp
+                ),
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            SubmitButtonField(
+                text = "Add",
+                loading = stateValue == FetchingState.LOADING,
+                inputsAreValid = inputIngredients.value.isNotBlank(),
+                containerColor = CocktailOrangeColor,
+                contentColor = CocktailBlackColor,
+                disabledContentColor = CocktailBlackColor,
+                disabledContainerColor = CocktailDarkGrayColor,
+                onClick = {
+                    ingredients.add(inputIngredients.value)
+                    inputIngredients.value = ""
+                }
+            )
+        }
+    }
+
+    InputField(
+        modifier = Modifier,
+        valueState = inputIngredients,
+        label = "Enter new ingredient",
+        enabled = true,
+        backgroundColor = CocktailLightGrayColor
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    for ((index, ingredient) in ingredients.withIndex()) {
+        Text(
+            text = ingredient,
+            modifier = Modifier
+                .padding(4.dp)
+                .fillMaxWidth()
+        )
+
+        if (index < ingredients.size - 1) {
+            Divider(
+                color = CocktailBlackColor,
+                thickness = 2.dp,
+                modifier = Modifier
+                    .padding(top = 5.dp)
+                    .padding(bottom = 5.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun Preparation(inputPreparation: MutableState<String>, isRecipePrivate: MutableState<Boolean>) {
+    Text(
+        text = "Preparation",
+        style = LocalTextStyle.current.copy(
+            fontWeight = FontWeight.Bold,
+            fontSize = 30.sp
+        ),
+        modifier = Modifier
+            .padding(top = 20.dp)
+            .padding(bottom = 10.dp)
+            .fillMaxWidth()
+    )
+
+    ResizableMultiLineInputField(
+        value = inputPreparation.value,
+        onValueChange = { newValue -> inputPreparation.value = newValue },
+        label = "Enter how to prepare this drink",
+        backgroundColor = CocktailLightGrayColor
+    )
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Checkbox(
+            checked = isRecipePrivate.value,
+            onCheckedChange = { isChecked ->
+                isRecipePrivate.value = isChecked
+            },
+            modifier = Modifier.align(Alignment.CenterVertically)
+        )
+        Text(
+            text = "Private",
+            style = LocalTextStyle.current.copy(
+                fontSize = 16.sp
+            ),
+        )
+    }
+}
+
+fun saveCocktail(cocktailData: Map<String, Any>, isRecipePrivate: Boolean) {
+    if (isRecipePrivate) {
+        saveCocktailPrivate(cocktailData)
+    } else {
+        saveCocktailGlobal(cocktailData)
+    }
+}
+
+private fun saveCocktailPrivate(cocktailData: Map<String, Any>) {
+    val auth = FirebaseAuth.getInstance()
+    val currentUser = auth.currentUser
+
+    val db = FirebaseFirestore.getInstance()
+
+    if (currentUser != null) {
+        val userId = currentUser.uid
+        val usersCollectionRef = db.collection("users")
+
+        usersCollectionRef.whereEqualTo("user_id", userId)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val userDocumentId = document.id
+                    val userDocumentRef = db.collection("users").document(userDocumentId)
+
+                    userDocumentRef.collection("myCocktails").add(cocktailData)
+                        .addOnSuccessListener {
+                            println("Cocktail added successfully!")
+                        }
+                        .addOnFailureListener { e ->
+                            println("Error adding cocktail: $e")
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                println("Error getting user document: $e")
+            }
+    }
+}
+
+private fun saveCocktailGlobal(cocktailData: Map<String, Any>) {
+    val db = FirebaseFirestore.getInstance()
+
+    db.collection("myCocktails").add(cocktailData)
+        .addOnSuccessListener {
+            println("Cocktail added successfully!")
+        }
+        .addOnFailureListener { e ->
+            println("Error adding cocktail: $e")
+        }
 }
