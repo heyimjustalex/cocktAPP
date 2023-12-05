@@ -48,14 +48,42 @@ class RegisterScreenViewModel :ViewModel() {
             Log.e("Register", "Exception during user registration", e)
         }
     }
-    fun createUserInDifferentCollection(displayName:String?){
+    // V1
+    /*fun createUserInDifferentCollection(displayName:String?){
         val userId = auth.currentUser?.uid
         val user = displayName?.let { FUser(id=userId,displayName= it) }?.toMap()
 
         if (user != null) {
             FirebaseFirestore.getInstance().collection("users").add(user)
         }
+    }*/
+
+    // V2
+    /*fun createUserInDifferentCollection(displayName: String?) {
+        val userId = auth.currentUser?.uid
+        val user = displayName?.let { FUser(id = userId, displayName = it) }
+
+        if (user != null) {
+            val usersCollection = FirebaseFirestore.getInstance().collection("users")
+
+            usersCollection.add(user.toMap()).addOnSuccessListener { documentReference ->
+                val newUserId = documentReference.id
+                usersCollection.document(newUserId).collection("myCocktails")
+            }
+        }
+    }*/
+    fun createUserInDifferentCollection(displayName: String?) {
+        val userId = auth.currentUser?.uid
+        val user = displayName?.let { FUser(id = userId, displayName = it) }
+
+        if (user != null && userId != null) {
+            val usersCollection = FirebaseFirestore.getInstance().collection("users")
+
+            // We add the user with same document id as user id
+            usersCollection.document(userId).set(user.toMap())
+        }
     }
+
 
 }
 
