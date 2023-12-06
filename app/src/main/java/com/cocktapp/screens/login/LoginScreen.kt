@@ -4,12 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,19 +20,20 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cocktapp.components.BottomFormRedirectButton
 import com.cocktapp.components.EmailInputField
+import com.cocktapp.components.HeaderLoginRegister
 import com.cocktapp.components.PasswordInputField
 import com.cocktapp.components.SubmitButtonField
 import com.cocktapp.navigation.AvaliableScreens
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.cocktapp.components.HeaderLoginRegister
+import com.cocktapp.ui.theme.CocktailBlackColor
+import com.cocktapp.ui.theme.CocktailDarkGrayColor
 import com.cocktapp.ui.theme.CocktailOrangeColor
-import com.google.common.base.Splitter
+import com.cocktapp.ui.theme.CocktailWhiteColor
 
 @Composable
 fun LoginScreen(navController: NavController, loginScreenViewModel: LoginScreenViewModel = viewModel()){
@@ -132,6 +131,10 @@ fun LoginForm(
             text = "Login",
             loading = stateValue==FetchingState.LOADING,
             inputsAreValid = isValid,
+            containerColor = CocktailBlackColor,
+            contentColor = CocktailWhiteColor,
+            disabledContentColor = CocktailBlackColor,
+            disabledContainerColor = CocktailDarkGrayColor,
             onClick = {
 //                run {
 //                    email.value.trim()
