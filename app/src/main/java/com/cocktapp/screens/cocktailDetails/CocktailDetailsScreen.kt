@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,7 +49,7 @@ import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
 @Composable
 fun CocktailDetailsScreen(navController: NavController, cocktailString: String) {
     //Context for the sharing activity
-    val context = LocalContext.current;
+    //val context = LocalContext.current;
 
     val context = LocalContext.current;
 
@@ -148,18 +149,19 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String) 
                         )
                     }
                 }
-                Box {
+                BoxWithConstraints(
+                    modifier = Modifier.fillMaxSize()
+                ) {
                     Button(
                         onClick = { ShareCocktailActivity.shareRecipe(context, Cocktail(ingredientsList, instructions, name)) },
                         modifier = Modifier
-                            .offset(x = 300.dp, y = 120.dp)
+                            .align(Alignment.BottomEnd)
+                            .padding(18.dp)
                             .size(70.dp),
-
                         shape = CircleShape,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF161616),
                             contentColor = Color.White)
-
                     ) {
                         Icon(
                             imageVector = ImageVector.vectorResource(id = R.drawable.share),
