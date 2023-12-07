@@ -37,17 +37,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.cocktapp.R
 import com.cocktapp.activities.ShareCocktailActivity
 import com.cocktapp.model.Cocktail
+import com.cocktapp.navigation.AvaliableScreens
 import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CocktailDetailsScreen(navController: NavController, cocktailString: String) {
+fun CocktailDetailsScreen(navController: NavController, cocktailString: String, cocktailDetailsViewModel: CocktailDetailScreenViewModel = hiltViewModel()) {
     //Context for the sharing activity
     //val context = LocalContext.current;
 
@@ -150,6 +155,33 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String) 
                                 .fillMaxWidth(),
                             textAlign = TextAlign.Left,
                         )
+                    }
+                }
+                if (fromWhere == "Firestore") {
+                    Divider(
+                        color = Color.Gray,
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(0.dp, 30.dp)
+                    )
+
+                    Row() {
+                        Button(
+                            onClick = {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    Log.d("CocktailDetails", cocktailString)
+                                    cocktailDetailsViewModel.deleteCocktailFirestore(cocktailId)
+                                    navController.navigateUp()
+                                }
+                                //navController.navigate(AvaliableScreens.MyCocktailsScreen.name)
+                            },
+                            shape = CircleShape,
+                            modifier = Modifier.size(90.dp, 50.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF161616),
+                                contentColor = Color.White)
+                        ) {
+                            Text(text = "delete")
+                        }
                     }
                 }
                 BoxWithConstraints(

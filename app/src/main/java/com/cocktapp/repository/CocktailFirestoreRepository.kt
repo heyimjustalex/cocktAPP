@@ -104,4 +104,25 @@ class CocktailFirestoreRepository @Inject constructor() {
 
         return DataRequestWrapper(data = response)
     }
+
+    suspend fun deleteCocktail(cocktailId: String): DataRequestWrapper<Unit, String, Exception> {
+        val userId = auth.currentUser?.uid
+        return try {
+            if (userId != null) {
+                firestore.collection("users")
+                    .document(userId)
+                    .collection("myCocktails")
+                    .document(cocktailId)
+                    .delete()
+                    .await()
+
+                DataRequestWrapper(data = Unit) // Successfully deleted
+            } else {
+                throw Exception("User ID is null.")
+            }
+        } catch (e: Exception) {
+            Log.d("DELETE_RESPONSE", e.stackTraceToString())
+            DataRequestWrapper(exception = e)
+        }
+    }
 }
