@@ -18,16 +18,23 @@ class CocktailSearchViewModel @Inject constructor(private val cocktailRepository
     // so you know how to fetch data in order to search it
     // if you want to see how to process it you need to look at DataRequestWrapper, Repository, Model, CocktailAPI Classes
 
-
     suspend fun getCocktailsFirestoreByName(name: String): DataRequestWrapper<Cocktails, String, Exception> {
         return cocktailFirestoreRepository.getCocktailsFirestoreByName(name)
+    }
+
+    suspend fun getCocktailsFirestoreByNameAll(name:String): DataRequestWrapper<Cocktails, String, Exception> {
+        return cocktailFirestoreRepository.getCocktailsFirestoreByNameAll(name)
     }
 
     suspend fun getCocktailsByName(name:String): DataRequestWrapper<Cocktails, String, Exception> {
         return cocktailRepository.getCocktailsByName(name)
     }
 
-    suspend fun getCocktailsFirestoreAll(): DataRequestWrapper<Cocktails, String, Exception> {
+    suspend fun getCocktailsFirestoreUser(): DataRequestWrapper<Cocktails, String, Exception> {
         return cocktailFirestoreRepository.getCocktailsFirestore()
+    }
+
+    suspend fun getCocktailsFirestoreAll(): DataRequestWrapper<Cocktails, String, Exception> {
+        return cocktailFirestoreRepository.getCocktailsFirestoreAllCocktails()
     }
 }

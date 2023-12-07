@@ -77,25 +77,49 @@ fun ShowDataCombined(name: String, cocktailSearchViewModel: CocktailSearchViewMo
             name1 = ""
             name2 = "a"
         }
-        val firestoreCocktails = async {
+        val firestoreCocktailsByName = async {
             cocktailSearchViewModel.getCocktailsFirestoreByName(name1)
         }
+        val firestoreCocktailsByNameAll = async {
+            cocktailSearchViewModel.getCocktailsFirestoreByNameAll(name1)
+        }
+        val firestoreCocktailsUser = async {
+            cocktailSearchViewModel.getCocktailsFirestoreUser()
+        }
         val firestoreCocktailsAll = async {
-            cocktailSearchViewModel.getCocktailsFirestoreAll()
+            cocktailSearchViewModel.getCocktailsFirestoreAll();
         }
         val localCocktails = async { cocktailSearchViewModel.getCocktailsByName(name2) }
-        val firestoreResult =
-            if (name1.isEmpty()) firestoreCocktailsAll.await() else firestoreCocktails.await()
+
+        val firestoreCocktailsUserData = firestoreCocktailsUser.await();
+        val firestoreCocktailsAllData = firestoreCocktailsAll.await();
+        val firestoreCocktailsByNameData = firestoreCocktailsByName.await();
+        val firestoreCocktailsByNameAllData = firestoreCocktailsByNameAll.await();
         val localResult = localCocktails.await()
+
+
+
+        val mergedDataFirestoreAll =
+        (firestoreCocktailsUserData.data?.toList() ?: listOf()) + (firestoreCocktailsAllData.data?.toList()
+            ?: listOf())
+
+        val mergedDataFirestoreByName =
+            (firestoreCocktailsByNameData.data?.toList() ?: listOf()) + (firestoreCocktailsByNameAllData.data?.toList()
+                ?: listOf())
+
+
+        val firestoreResult =
+            if (name1.isEmpty()) mergedDataFirestoreAll else mergedDataFirestoreByName
+
         // Combine the results of firestoreCocktails and localCocktails
         val mergedData =
-            (firestoreResult.data?.toList() ?: listOf()) + (localResult.data?.toList()
+            (firestoreResult ?: listOf()) + (localResult.data?.toList()
                 ?: listOf())
         // Convert mergedData to a MutableList<Cocktail>
         val cocktailList = mergedData.filterIsInstance<Cocktail>().toMutableList()
         // Create a Cocktails object with the MutableList<Cocktail>
         val cocktails = Cocktails(cocktailList)
-        cocktailData = DataRequestWrapper(state = firestoreResult.state, data = cocktails)
+        cocktailData = DataRequestWrapper(state = "finished", data = cocktails)
     }
     ShowDataSearch(loadCocktails = cocktailData, navController = navController)
 }
