@@ -178,4 +178,6 @@ dependencies{
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.5.2")
+    implementation ("androidx.compose.material:material-icons-extended:1.5.4") // Ersetzen Sie 1.0.0 durch die aktuelle Version
+
 }

@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -199,8 +202,8 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String, 
                             contentColor = Color.White)
                     ) {
                         Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.share),
-                            contentDescription = "Icon"
+                            imageVector = Icons.Rounded.Share, // Verwendung des Material Icons
+                            contentDescription = "Sharing"
                         )
                     }
                 }
