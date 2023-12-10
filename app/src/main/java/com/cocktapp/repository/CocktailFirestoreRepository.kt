@@ -31,7 +31,7 @@ class CocktailFirestoreRepository @Inject constructor() {
                         val cocktail = document.toObject(Cocktail::class.java)
                         cocktail!!.copy(
                             cocktailId = document.id, // Asigna el ID del documento al campo cocktailId
-                            fromWhere = "Firestore"
+                            fromWhere = "FirestorePrivate"
                         )
                     }.toMutableList()
 
@@ -63,7 +63,7 @@ class CocktailFirestoreRepository @Inject constructor() {
                         .await()
 
                     val cocktails = result.toObjects(Cocktail::class.java).map { cocktail ->
-                        cocktail.copy(fromWhere = "Firestore")
+                        cocktail.copy(fromWhere = "FirestorePrivate")
                     }.toMutableList()
 
                     Cocktails(cocktails)
@@ -109,7 +109,7 @@ class CocktailFirestoreRepository @Inject constructor() {
                         .await()
 
                     val cocktails = result.toObjects(Cocktail::class.java).map { cocktail ->
-                        cocktail.copy(fromWhere = "Firestore")
+                        cocktail.copy(fromWhere = "FirestorePublic")
                     }.toMutableList()
 
                     Cocktails(cocktails)
@@ -130,7 +130,7 @@ class CocktailFirestoreRepository @Inject constructor() {
                         .await()
 
                     val cocktails = result.toObjects(Cocktail::class.java).map { cocktail ->
-                        cocktail.copy(fromWhere = "Firestore")
+                        cocktail.copy(fromWhere = "FirestorePublic")
                     }.toMutableList()
 
                     Cocktails(cocktails)

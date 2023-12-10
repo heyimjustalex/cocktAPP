@@ -157,7 +157,7 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String, 
                         )
                     }
                 }
-                if (fromWhere == "Firestore") {
+                if (fromWhere == "FirestorePrivate") {
                     Divider(
                         color = Color.Gray,
                         thickness = 1.dp,
