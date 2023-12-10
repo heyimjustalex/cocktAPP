@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.cocktapp.components.InputField
@@ -21,9 +22,10 @@ import com.cocktapp.components.SubmitButtonField
 import com.cocktapp.navigation.EditableNavbarForScaffoldWithLogoutAndBackButton
 import com.cocktapp.screens.register.RegisterScreenViewModel
 import com.cocktapp.ui.theme.*
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 data class CocktailFormData(
@@ -37,7 +39,7 @@ data class CocktailFormData(
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CocktailAddScreen(navController: NavController) {
+fun CocktailAddScreen(navController: NavController, viewModel: CocktailAddViewModel = hiltViewModel()) {
     var formData by remember {
         mutableStateOf(
             CocktailFormData(
@@ -89,7 +91,10 @@ fun CocktailAddScreen(navController: NavController) {
                             "instructions" to formData.inputPreparation.value,
                             "name" to formData.cocktailName.value.lowercase()
                         )
-                        saveCocktail(flatCocktailData, isRecipePrivate.value)
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            viewModel.addCocktail(flatCocktailData, isRecipePrivate.value)
+                        }
 
                         formData.showSuccessMessage.value = true
 
@@ -242,42 +247,4 @@ fun Preparation(inputPreparation: MutableState<String>, isRecipePrivate: Mutable
             ),
         )
     }
-}
-
-fun saveCocktail(cocktailData: Map<String, Any>, isRecipePrivate: Boolean) {
-    if (isRecipePrivate) {
-        saveCocktailPrivate(cocktailData)
-    } else {
-        saveCocktailGlobal(cocktailData)
-    }
-}
-
-private fun saveCocktailPrivate(cocktailData: Map<String, Any>) {
-    val auth = FirebaseAuth.getInstance()
-    val currentUser = auth.currentUser
-
-    val db = FirebaseFirestore.getInstance()
-
-    if (currentUser != null) {
-        val userId = currentUser.uid
-
-        val userDocumentRef = db.collection("users").document(userId)
-
-        val myCocktailsCollectionRef = userDocumentRef.collection("myCocktails")
-        val newCocktailDocumentRef = myCocktailsCollectionRef.document()
-
-        newCocktailDocumentRef.set(cocktailData)
-    }
-}
-
-private fun saveCocktailGlobal(cocktailData: Map<String, Any>) {
-    val db = FirebaseFirestore.getInstance()
-
-    db.collection("myCocktails").add(cocktailData)
-        .addOnSuccessListener {
-            println("Cocktail added successfully!")
-        }
-        .addOnFailureListener { e ->
-            println("Error adding cocktail: $e")
-        }
 }
