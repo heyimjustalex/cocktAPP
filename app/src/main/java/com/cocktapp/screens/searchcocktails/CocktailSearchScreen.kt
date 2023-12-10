@@ -55,7 +55,7 @@ fun CocktailSearchScreen(navController: NavController, cocktailSearchViewModel: 
                     onValueChange = { textState.value = it },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 5.dp),
+                        .padding(bottom = 10.dp),
                     label = { Text("Search") },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
