@@ -23,13 +23,15 @@ import com.cocktapp.screens.register.RegisterScreenViewModel
 import com.cocktapp.ui.theme.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.delay
 
 
 data class CocktailFormData(
     val ingredients: MutableList<String>,
     val inputIngredients: MutableState<String>,
     val inputPreparation: MutableState<String>,
-    val cocktailName: MutableState<String>
+    val cocktailName: MutableState<String>,
+    val showSuccessMessage: MutableState<Boolean> = mutableStateOf(false)
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,14 +91,29 @@ fun CocktailAddScreen(navController: NavController) {
                         )
                         saveCocktail(flatCocktailData, isRecipePrivate.value)
 
-                        formData = CocktailFormData(
-                            mutableStateListOf(),
-                            mutableStateOf(""),
-                            mutableStateOf(""),
-                            mutableStateOf("New Cocktail")
-                        )
-                        isRecipePrivate.value = false
+                        formData.showSuccessMessage.value = true
+
                     }
+                )
+            }
+
+            LaunchedEffect(formData.showSuccessMessage.value) {
+                delay(3000)
+                formData.showSuccessMessage.value = false
+                formData = CocktailFormData(
+                    mutableStateListOf(),
+                    mutableStateOf(""),
+                    mutableStateOf(""),
+                    mutableStateOf("New Cocktail")
+                )
+                isRecipePrivate.value = false
+            }
+
+            if (formData.showSuccessMessage.value) {
+                Text(
+                    text = "Cocktail added successfully!",
+                    color = CocktailOrangeColor,
+                    modifier = Modifier.padding(top = 8.dp)
                 )
             }
         }
@@ -243,27 +260,13 @@ private fun saveCocktailPrivate(cocktailData: Map<String, Any>) {
 
     if (currentUser != null) {
         val userId = currentUser.uid
-        val usersCollectionRef = db.collection("users")
 
-        usersCollectionRef.whereEqualTo("user_id", userId)
-            .get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    val userDocumentId = document.id
-                    val userDocumentRef = db.collection("users").document(userDocumentId)
+        val userDocumentRef = db.collection("users").document(userId)
 
-                    userDocumentRef.collection("myCocktails").add(cocktailData)
-                        .addOnSuccessListener {
-                            println("Cocktail added successfully!")
-                        }
-                        .addOnFailureListener { e ->
-                            println("Error adding cocktail: $e")
-                        }
-                }
-            }
-            .addOnFailureListener { e ->
-                println("Error getting user document: $e")
-            }
+        val myCocktailsCollectionRef = userDocumentRef.collection("myCocktails")
+        val newCocktailDocumentRef = myCocktailsCollectionRef.document()
+
+        newCocktailDocumentRef.set(cocktailData)
     }
 }
 
