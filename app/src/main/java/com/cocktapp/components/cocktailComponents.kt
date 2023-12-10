@@ -28,7 +28,9 @@ fun CocktailsList(cocktails: List<Cocktail>, navController: NavController) {
         modifier = Modifier.fillMaxSize(),
     ) {
         itemsIndexed(cocktails) { index, cocktail ->
-            CocktailCard(cocktail = cocktail, number = index + 1, navController = navController)
+            Box(modifier = Modifier.padding(8.dp)) {
+                CocktailCard(cocktail = cocktail, number = index + 1, navController = navController)
+            }
         }
     }
 }
@@ -36,12 +38,12 @@ fun CocktailsList(cocktails: List<Cocktail>, navController: NavController) {
 @Composable
 fun CocktailCard(cocktail: Cocktail, number: Int, navController: NavController) {
 
-    val isEven = number % 2 == 0
+    val fromWhere = cocktail.fromWhere;
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = if (isEven){
+                color = if (fromWhere == "API"){
                     Color.Gray
                 } else {
                     Color.LightGray
@@ -57,11 +59,12 @@ fun CocktailCard(cocktail: Cocktail, number: Int, navController: NavController) 
                 .padding(16.dp)
         ) {
             Text(
-                text = "${cocktail.name.uppercase()}",
+                text = "${cocktail.name.uppercase()} ",
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
             )
             Text(text = "Number of Ingredients: ${cocktail.ingredients.size}", color = Color.Black)
+            Text(text = "This Cocktail is from: ${cocktail.fromWhere}", color = Color.Black)
         }
     }
 }

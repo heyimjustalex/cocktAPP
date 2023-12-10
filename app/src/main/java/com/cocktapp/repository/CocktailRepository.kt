@@ -13,7 +13,10 @@ class CocktailRepository @Inject constructor(private val api: CocktailAPI) {
 
         val response =
             try{
-                api.getCocktailsByName(name)
+                val cocktails = api.getCocktailsByName(name).map { cocktail ->
+                    cocktail.copy(fromWhere = "API")
+                }.toMutableList()
+                Cocktails(cocktails)
 
             }
             catch (e:Exception){
@@ -28,7 +31,10 @@ class CocktailRepository @Inject constructor(private val api: CocktailAPI) {
 
         val response =
             try{
-                api.getCocktailsByIngredients(ingredients = ingredients )
+                val cocktails = api.getCocktailsByIngredients(ingredients).map { cocktail ->
+                    cocktail.copy(fromWhere = "API")
+                }.toMutableList()
+                Cocktails(cocktails)
             }
             catch (e:Exception){
                 return DataRequestWrapper(exception = e)

@@ -85,7 +85,7 @@ fun CocktailAddScreen(navController: NavController) {
                         val flatCocktailData = mapOf(
                             "ingredients" to formData.ingredients.toList(),
                             "instructions" to formData.inputPreparation.value,
-                            "name" to formData.cocktailName.value
+                            "name" to formData.cocktailName.value.lowercase()
                         )
                         saveCocktail(flatCocktailData, isRecipePrivate.value)
 
