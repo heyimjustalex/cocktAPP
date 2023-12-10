@@ -98,48 +98,108 @@ class CocktailFirestoreRepository @Inject constructor() {
             DataRequestWrapper(exception = e)
         }
     }
-        suspend fun getCocktailsFirestoreByNameAll(name: String): DataRequestWrapper<Cocktails, String, Exception> {
-            val lowercaseName = name.lowercase()
-            val response =
-                try {
-                    val result = firestore.collection("myCocktails")
-                        .whereGreaterThanOrEqualTo("name", lowercaseName)
-                        .whereLessThanOrEqualTo("name", lowercaseName + "\uf8ff")
-                        .get()
-                        .await()
 
-                    val cocktails = result.toObjects(Cocktail::class.java).map { cocktail ->
-                        cocktail.copy(fromWhere = "FirestorePublic")
-                    }.toMutableList()
+    suspend fun getCocktailsFirestoreByNameAll(name: String): DataRequestWrapper<Cocktails, String, Exception> {
+        val lowercaseName = name.lowercase()
+        val response =
+            try {
+                val result = firestore.collection("myCocktails")
+                    .whereGreaterThanOrEqualTo("name", lowercaseName)
+                    .whereLessThanOrEqualTo("name", lowercaseName + "\uf8ff")
+                    .get()
+                    .await()
 
-                    Cocktails(cocktails)
+                val cocktails = result.toObjects(Cocktail::class.java).map { cocktail ->
+                    cocktail.copy(fromWhere = "FirestorePublic")
+                }.toMutableList()
 
-                } catch (e: Exception) {
-                    Log.d("RESPONSE", e.stackTraceToString())
-                    return DataRequestWrapper(exception = e)
-                }
+                Cocktails(cocktails)
 
-            return DataRequestWrapper(data = response)
-        }
+            } catch (e: Exception) {
+                Log.d("RESPONSE", e.stackTraceToString())
+                return DataRequestWrapper(exception = e)
+            }
 
-        suspend fun getCocktailsFirestoreAllCocktails(): DataRequestWrapper<Cocktails, String, Exception> {
-            val response =
-                try {
-                    val result = firestore.collection("myCocktails")
-                        .get()
-                        .await()
+        return DataRequestWrapper(data = response)
+    }
 
-                    val cocktails = result.toObjects(Cocktail::class.java).map { cocktail ->
-                        cocktail.copy(fromWhere = "FirestorePublic")
-                    }.toMutableList()
+    suspend fun getCocktailsFirestoreAllCocktails(): DataRequestWrapper<Cocktails, String, Exception> {
+        val response =
+            try {
+                val result = firestore.collection("myCocktails")
+                    .get()
+                    .await()
 
-                    Cocktails(cocktails)
+                val cocktails = result.toObjects(Cocktail::class.java).map { cocktail ->
+                    cocktail.copy(fromWhere = "FirestorePublic")
+                }.toMutableList()
 
-                } catch (e: Exception) {
-                    Log.d("RESPONSE", e.stackTraceToString())
-                    return DataRequestWrapper(exception = e)
-                }
+                Cocktails(cocktails)
 
-            return DataRequestWrapper(data = response)
+            } catch (e: Exception) {
+                Log.d("RESPONSE", e.stackTraceToString())
+                return DataRequestWrapper(exception = e)
+            }
+
+        return DataRequestWrapper(data = response)
+    }
+
+    suspend fun addCocktail(cocktailData: Map<String, Any>, isRecipePrivate: Boolean): DataRequestWrapper<Unit, String, Exception> {
+        return try {
+            if (isRecipePrivate) {
+                addCocktailPrivate(cocktailData)
+            } else {
+                addCocktailGlobal(cocktailData)
+            }
+        } catch (e: Exception) {
+            Log.d("ADD_COCKTAIL_RESPONSE", e.stackTraceToString())
+            DataRequestWrapper(exception = e)
         }
     }
+
+    private suspend fun addCocktailPrivate(cocktailData: Map<String, Any>): DataRequestWrapper<Unit, String, Exception> {
+        return try {
+            val auth = FirebaseAuth.getInstance()
+            val currentUser = auth.currentUser
+
+            val db = FirebaseFirestore.getInstance()
+
+            if (currentUser != null) {
+                val userId = currentUser.uid
+
+                val userDocumentRef = db.collection("users").document(userId)
+
+                val myCocktailsCollectionRef = userDocumentRef.collection("myCocktails")
+                val newCocktailDocumentRef = myCocktailsCollectionRef.document()
+
+                newCocktailDocumentRef.set(cocktailData).await()
+
+                DataRequestWrapper(data = Unit)
+            } else {
+                throw Exception("User ID is null.")
+            }
+        } catch (e: Exception) {
+            Log.d("ADD_COCKTAIL_PRIVATE_RESPONSE", e.stackTraceToString())
+            DataRequestWrapper(exception = e)
+        }
+    }
+
+    private suspend fun addCocktailGlobal(cocktailData: Map<String, Any>): DataRequestWrapper<Unit, String, Exception> {
+        return try {
+            val db = FirebaseFirestore.getInstance()
+
+            db.collection("myCocktails").add(cocktailData)
+                .addOnSuccessListener {
+                    println("Cocktail added successfully!")
+                }
+                .addOnFailureListener { e ->
+                    println("Error adding cocktail: $e")
+                }.await()
+
+            DataRequestWrapper(data = Unit)
+        } catch (e: Exception) {
+            Log.d("ADD_COCKTAIL_GLOBAL_RESPONSE", e.stackTraceToString())
+            DataRequestWrapper(exception = e)
+        }
+    }
+}
