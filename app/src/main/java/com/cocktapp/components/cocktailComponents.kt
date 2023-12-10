@@ -28,7 +28,7 @@ fun CocktailsList(cocktails: List<Cocktail>, navController: NavController) {
         modifier = Modifier.fillMaxSize(),
     ) {
         itemsIndexed(cocktails) { index, cocktail ->
-            Box(modifier = Modifier.padding(8.dp)) {
+            Box(modifier = Modifier.padding(bottom = 8.dp)) {
                 CocktailCard(cocktail = cocktail, number = index + 1, navController = navController)
             }
         }

@@ -4,21 +4,32 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.cocktapp.activities.ShareCocktailActivity
 import com.cocktapp.components.CocktailsList
+import com.cocktapp.model.Cocktail
 import com.cocktapp.model.Cocktails
 import com.cocktapp.navigation.AvaliableScreens
 import com.cocktapp.wrappers.DataRequestWrapper
@@ -47,18 +58,25 @@ fun ShowData(
                 cocktails = cocktailData.data ?: emptyList(),
                 navController = navController
             )
-
-            Button(
-                onClick = {
-                    navController.navigate(AvaliableScreens.CocktailAddScreen.name)
-                },
-                modifier = Modifier
-                    .padding(26.dp)
-                    .align(Alignment.BottomEnd)
-                    .height(56.dp)
-                //.align(Alignment.BottomCenter) To align Horizontally center
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = "Add")
+                Button(
+                    onClick = { navController.navigate(AvaliableScreens.CocktailAddScreen.name) },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(18.dp)
+                        .size(70.dp),
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF161616),
+                        contentColor = Color.White)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Add, // Verwendung des Material Icons
+                        contentDescription = "Add"
+                    )
+                }
             }
         }
     } else {
@@ -72,17 +90,25 @@ fun ShowData(
                     .padding(16.dp) // Ajusta el padding según tus preferencias
                     .wrapContentSize(Alignment.Center)
             )
-            Button(
-                onClick = {
-                    navController.navigate(AvaliableScreens.CocktailAddScreen.name)
-                },
-                modifier = Modifier
-                    .padding(26.dp)
-                    .align(Alignment.BottomEnd)
-                    .height(56.dp)
-                //.align(Alignment.BottomCenter) To align Horizontally center
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = "Add")
+                Button(
+                    onClick = { navController.navigate(AvaliableScreens.CocktailAddScreen.name) },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(18.dp)
+                        .size(70.dp),
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF161616),
+                        contentColor = Color.White)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Add, // Verwendung des Material Icons
+                        contentDescription = "Add"
+                    )
+                }
             }
         }
 
@@ -109,17 +135,25 @@ fun ShowDataSearch(
                         navController = navController
                     )
 
-                    Button(
-                        onClick = {
-                            navController.navigate(AvaliableScreens.CocktailAddScreen.name)
-                        },
-                        modifier = Modifier
-                            .padding(26.dp)
-                            .align(Alignment.BottomEnd)
-                            .height(56.dp)
-                        //.align(Alignment.BottomCenter) To align Horizontally center
+                    BoxWithConstraints(
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        Text(text = "Add")
+                        Button(
+                            onClick = { navController.navigate(AvaliableScreens.CocktailAddScreen.name) },
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(18.dp)
+                                .size(70.dp),
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF161616),
+                                contentColor = Color.White)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Add, // Verwendung des Material Icons
+                                contentDescription = "Add"
+                            )
+                        }
                     }
                 }
             } else {
