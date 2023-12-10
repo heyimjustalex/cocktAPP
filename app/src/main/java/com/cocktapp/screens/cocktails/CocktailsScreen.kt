@@ -73,7 +73,7 @@ fun ShowData(
                         contentColor = Color.White)
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.Add, // Verwendung des Material Icons
+                        imageVector = Icons.Rounded.Add, // Use of the material icon
                         contentDescription = "Add"
                     )
                 }
@@ -87,7 +87,7 @@ fun ShowData(
                 text = "No cocktails found, data is null",
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp) // Ajusta el padding según tus preferencias
+                    .padding(16.dp) // Adjust the padding according to your preferences
                     .wrapContentSize(Alignment.Center)
             )
             BoxWithConstraints(
@@ -105,7 +105,7 @@ fun ShowData(
                         contentColor = Color.White)
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.Add, // Verwendung des Material Icons
+                        imageVector = Icons.Rounded.Add, // Use of the material icon
                         contentDescription = "Add"
                     )
                 }
@@ -150,7 +150,7 @@ fun ShowDataSearch(
                                 contentColor = Color.White)
                         ) {
                             Icon(
-                                imageVector = Icons.Rounded.Add, // Verwendung des Material Icons
+                                imageVector = Icons.Rounded.Add, // Use of the material icon
                                 contentDescription = "Add"
                             )
                         }

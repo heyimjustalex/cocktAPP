@@ -30,7 +30,7 @@ class CocktailFirestoreRepository @Inject constructor() {
                     val cocktails = result.documents.map { document ->
                         val cocktail = document.toObject(Cocktail::class.java)
                         cocktail!!.copy(
-                            cocktailId = document.id, // Asigna el ID del documento al campo cocktailId
+                            cocktailId = document.id, // Assigns the document ID to the cocktailId field
                             fromWhere = "FirestorePrivate"
                         )
                     }.toMutableList()

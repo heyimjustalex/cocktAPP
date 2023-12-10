@@ -202,7 +202,7 @@ fun CocktailDetailsScreen(navController: NavController, cocktailString: String, 
                             contentColor = Color.White)
                     ) {
                         Icon(
-                            imageVector = Icons.Rounded.Share, // Verwendung des Material Icons
+                            imageVector = Icons.Rounded.Share, //Use of the material iconal Icons
                             contentDescription = "Sharing"
                         )
                     }
