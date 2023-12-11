@@ -1,12 +1,23 @@
 package com.cocktapp.screens.searchcocktails
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TextField
@@ -25,10 +36,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.cocktapp.components.CocktailsList
 import com.cocktapp.model.Cocktail
 import com.cocktapp.model.Cocktails
+import com.cocktapp.navigation.AvaliableScreens
 import com.cocktapp.navigation.NavbarForScaffoldWithLogoutAndBackButton
-import com.cocktapp.screens.cocktails.ShowDataSearch
 import com.cocktapp.wrappers.DataRequestWrapper
 import kotlinx.coroutines.async
 
@@ -122,4 +134,51 @@ fun ShowDataCombined(name: String, cocktailSearchViewModel: CocktailSearchViewMo
         cocktailData = DataRequestWrapper(state = "finished", data = cocktails)
     }
     ShowDataSearch(loadCocktails = cocktailData, navController = navController)
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun ShowDataSearch(
+    loadCocktails: DataRequestWrapper<Cocktails, String, Exception>,
+    navController: NavController
+) {
+    when (loadCocktails.state) {
+        "loading" -> CircularProgressIndicator()
+        else -> {
+            if (loadCocktails.data != null && loadCocktails.data!!.isNotEmpty()) {
+                Log.d("DONE","LOADING DATA DONE")
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CocktailsList(
+                        cocktails = loadCocktails.data ?: emptyList(),
+                        navController = navController
+                    )
+
+                    BoxWithConstraints(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Button(
+                            onClick = { navController.navigate(AvaliableScreens.CocktailAddScreen.name) },
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(18.dp)
+                                .size(70.dp),
+                            shape = CircleShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFF161616),
+                                contentColor = Color.White)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Add, // Use of the material icon
+                                contentDescription = "Add"
+                            )
+                        }
+                    }
+                }
+            } else {
+                Text("No cocktails found")
+            }
+        }
+    }
 }
