@@ -75,3 +75,9 @@ Additionally list in pull request description main changes.
 |   MainActivity.kt
 ```
 <br>
+
+## Project architecture
+![image](https://github.com/user-attachments/assets/3a376673-9605-46d5-a5e1-55cd5307f1c4)
+
+## More information in the report
+
